@@ -1,0 +1,365 @@
+@import 'controls';
+
+* {
+  // color: #000000;
+  // font-size: 25px;
+}
+
+label {
+  font-size: 1.5rem;
+}
+
+body {
+  background-color: rgb(255, 255, 255);
+  margin: 0px;
+}
+
+.room-time {
+  font-size: 1.1rem;
+}
+
+.powerup-times {
+  position: absolute;
+  font-size: 2rem;
+  top: -30px;
+  // left: 50%;
+  // transform: translateX(-50%);
+}
+
+.hidden-timer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  font-size: 7rem;
+  color: rgba(0, 0, 0, 0.068)!important;
+}
+
+.debug {
+  font-size: .8rem;
+}
+
+.dual-display {
+  display: flex;
+  .content {
+    margin-right: 1rem;
+    flex-grow: 1;
+  }
+}
+
+#canvas {
+  margin-top: 50px;
+  width: 100%;
+  height: auto;
+  border: 5px solid #814d23;
+  background-color: rgba(255, 255, 255, 0.336);
+  display: block;
+  margin: 0rem auto;
+}
+
+.scoreboard-container {
+  position: absolute;
+  top: 0px;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+  .scoreboard-background {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+  .scoreboard {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: peachpuff;
+    border: solid 5px #000;
+    padding: .5rem;
+    &-nickname {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .player-tag {
+      background-color: rgb(255, 206, 163);
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      margin: 1rem 3rem;
+      box-shadow: 0px 0px 1px 1px #000;
+    }
+    .out {
+      position: relative;
+      &:after {
+        position: absolute;
+        left: 0px;
+        content: "";
+        transform: translateY(50%);
+        top: 50%;
+        width: 100%;
+        height: 3px;
+        background-color: rgb(255, 64, 64);
+        box-shadow: 0px 0px 3px #000 
+      }
+    }
+  }
+}
+
+#touch-controls {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 200px;
+}
+
+#specplayers {
+  width: 100%;
+  height: 100px;
+  // border: 5px solid #814d23;
+  // background-color: rgba(255, 255, 255, 0.336);
+}
+
+.ripple {
+  width: 800px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.1;
+  position: absolute;
+}
+
+.progress-bar-red {
+  background-color: red;
+}
+
+.progress-bar-blue {
+  background-color: blue;
+}
+
+.progress-bar-green {
+  background-color: green;
+}
+
+.progress-bar-yellow {
+  background-color: yellow;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem;
+  width: 80%;
+  text-shadow: 0px 0px 2px #000000;
+  position: relative;
+  height: 100%;
+  background-image: url(/assets/img/bark.jpg);
+  background-size: 300px;
+  box-shadow: 0px 0px 4px;
+  // border: 5px solid #814d23;
+  background-color: rgba(255, 255, 255, 0.336);
+  &-right {
+    font-size: .85rem;
+    margin-left: 20%;
+    h5 {
+      font-size: 1rem;
+    }
+  }
+}
+
+#ad-holder {
+  height: 100px;
+  padding: .2rem;
+  &-full {
+    position: relative;
+    padding: 0rem;
+    height: 100px;
+  }
+}
+
+#startScreen, #gameScreen {
+  height: 90vh;
+  position: relative;
+  @media (max-width: 768px) {
+    height: 100vh;
+  } 
+}
+
+#startScreen_background {
+  position: relative;
+  background-image: url("/assets/img/startScreen_background.jpg");
+  filter: blur(4px);
+  /* Full height */
+  height: 100%; 
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  @media (max-width: 768px) {
+    background-size: 300%;
+    background-position: 50% -85px;
+  } 
+}
+
+#gameScreen .container-fluid {
+  position: absolute;
+  top: 0px;
+}
+
+.nickname-group {
+  position: relative;
+  #new-name {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateX(50%) translateY(-50%);
+    font-size: 1rem;
+    // width: 20px;
+    // height: 20px;
+    // background-color: #814d23;
+  }
+}
+
+.login-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: rgba(152, 200, 58, 0.56);
+  padding: 1.0rem 1rem;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #814d23;
+  border-radius: 5px;
+  max-width: 450px;
+  text-align: center;
+  .active {
+    background-color: rgb(255, 189, 132)!important;
+  }
+}
+
+.btn-success {
+  box-shadow: 0px 0px 2px 0px #814d23;
+  &:hover {
+    box-shadow: 0px 0px 5px 0px #814d23;
+  }
+}
+
+.btn-panel {
+  text-shadow: 0px 0px 2px #000000;
+  background-color: peachpuff;
+  border: solid 2px;
+}
+
+.col {
+  // border: 1px solid #000;
+  /* height: 50vh; */
+  position: relative;
+}
+
+.ad-cosmic {
+  // cursor: pointer;
+  background-color: #000000;
+  background-image: url(https://cosmicstudios.xyz/assets/img/backgrounds/bg-scroll.png);
+  animation: 100s scroll infinite linear;
+  background-size: 600px;
+  height: 100%;
+  img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+.ad {
+  /* margin-top: auto; */
+  width: calc(100% - 5px);
+  height: calc(100% - 5px);
+  background-image: linear-gradient(to bottom right, red, blue);
+  position: absolute;
+  bottom: 2.5px;
+  left: 2.5px;
+}
+
+.modal-content {
+  background-color: peachpuff;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #814d23;
+  border-radius: 5px;
+  text-shadow: 0px 0px 2px #000000;
+  .modal-header {
+    border-bottom: 1px solid #814d23;
+  }
+  .modal-footer {
+    border-top: 1px solid #814d23;
+  }
+  .btn {
+    text-shadow: 0px 0px 2px #000000;
+  }
+}
+
+.panel-content-group {
+  position: relative;
+  background-color: peachpuff;
+  border: solid 2px;
+  margin-top: 2rem;
+  padding: .5rem;
+  &:first-child {
+    margin-top: 0rem;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.form-control {
+  font-size: 1.5rem;
+}
+
+.fake-player {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: black;
+}
+
+.version {
+  position: absolute;
+  right: 2%;
+  bottom: 2%;
+}
+
+@media (min-width: 768px) {
+  #canvas {
+    width: 800px;
+    height: 800px;
+  }
+  #startScreen, #gameScreen {
+    height: 100vh;
+    position: relative;
+  }
+  #touch-controls {
+    display: none;
+    touch-action: none;
+    visibility: hidden;
+  }
+} 
+
+@-webkit-keyframes scroll {
+  100% {
+    background-position: 0px -3000px; } }
+
+@-moz-keyframes scroll {
+  100% {
+    background-position: 0px -3000px; } }
+
+@-o-keyframes scroll {
+  100% {
+    background-position: 0px -3000px; } }
+
+@-ms-keyframes scroll {
+  100% {
+    background-position: 0px -3000px; } }
+
+@keyframes scroll {
+  100% {
+    background-position: 0px -3000px; } }

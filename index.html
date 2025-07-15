@@ -1,0 +1,404 @@
+<html>
+
+<head>
+  <title>Four Frogs</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Cache-control" content="private">
+
+  <link rel="shortcut icon" href="assets/favicon.png">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link href="https://fonts.googleapis.com/css?family=Dokdo" rel="stylesheet">
+
+  <script src="/socket.io/socket.io.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="/assets/css/styles.css?v=1">
+
+</head>
+
+<body>
+
+  <section id="gameScreen">
+    <div id="startScreen_background"></div>
+
+    <div class="scoreboard-container d-none">
+      <div class="scoreboard-background"></div>
+      <div class="scoreboard">
+        <h2 class="mt-0 text-center">Game Results</h2>
+        <h4 class="mt-0 text-center">Winner: Joey!</h4>
+        <hr>
+
+        <div class="text-center">
+          <div class="player-tag">
+            <div>Red Player: <span class="scoreboard-nickname out">Example</span></div>
+            <div class="score">Score: 425</div>
+          </div>
+  
+          <div class="player-tag">
+            <div>Blue Player: <span class="scoreboard-nickname">Joey</span></div>
+            <div class="score">Score: 550</div>
+          </div>
+  
+          <div class="player-tag">
+            <div>Green Player: <span class="scoreboard-nickname out">Example</span></div>
+            <div class="score">Score: 25</div>
+          </div>
+  
+          <div class="player-tag">
+            <div>Yellow Player: <span class="scoreboard-nickname out">Example</span></div>
+            <div class="score">Score: 50</div>
+          </div>
+        </div>
+        
+        <hr>
+        <h5 class="mt-0 text-center">Lobby Will Restart</h5>
+        <h5 class="mt-0 text-center"><span id="scoreboard-timer">10</span></h5>
+      </div>
+    </div>
+
+    <div class="container-fluid h-100">
+      <div class="row h-100">
+
+        <div class="col-12 col-xl-6 pt-3 my-auto order-xl-2">
+
+          <!-- Lags the site, delay. -->
+          <!-- <img class="img-fluid ripple" src="./assets/ripple.gif" alt=""> -->
+
+          <div class="powerup-times d-flex justify-content-center w-100">
+            <span class="badge badge-success">Next Powerup: <span id="powerup_next">0</span> seconds</span>
+
+            <!-- <span class="badge badge-light">
+              1
+              <br>
+              1:30s
+            </span>
+
+            <span class="badge badge-success">1:30</span>
+            <span class="badge badge-success">1:00</span> -->
+
+          </div>
+
+          <div class="hidden-timer noselect">
+            <span id="time_left">Waiting...</span>
+          </div>
+
+          <canvas id="canvas"></canvas>
+
+        </div>
+
+        <div class="col-6 col-xl-3 d-none d-lg-block my-auto order-xl-1">
+
+          <div class="panel">
+
+            <!-- <h5>Room Number: <span >001</span></h5> -->
+
+            <div class="panel-content-group text-center">
+              <h5>Room Number: <span >1</span></h5>
+              <span id="lobbyStatus"></span>
+            </div>
+  
+            <div class="panel-content-group">
+              <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                <h5>Players</h5>
+                <h5><span id="playerCount">0</span>/4</h5>
+              </div>
+              <!-- <p>Red - <span id="lobby_1"></span></p> -->
+              <!-- <p>Blue - <span id="lobby_2"></span></p> -->
+              <!-- <p>Green - <span id="lobby_3"></span></p> -->
+              <!-- <p>Yellow - <span id="lobby_4"></span></p> -->
+            </div>
+            
+            <div class="panel-content-group" style="flex-grow: 1;">
+              <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                <h5>Specplayers</h5>
+                <h5>0</h5>
+              </div>
+
+              <canvas id="specplayers"></canvas>
+  
+            </div>
+
+            <div id="debug-bug-info" class="panel-content-group debug">
+
+              <h5>Debug Info</h5>
+
+              <div id='powerup-info'></div>
+              <span><br></span>
+              <div id='bug-info'></div>
+
+              <!-- <p>Bug-1 - <span id='bug-1-info'></span></p>
+              <p>Bug-2 - <span id='bug-2-info'></span></p>
+              <p>Bug-3 - <span id='bug-3-info'></span></p>
+              <p>Bug-4 - <span id='bug-4-info'></span></p>
+              <p>Bug-5 - <span id='bug-5-info'></span></p>
+              <p>Bug-6 - <span id='bug-6-info'></span></p>
+              <p>Bug-7 - <span id='bug-7-info'></span></p>
+              <p>Bug-8 - <span id='bug-8-info'></span></p>
+              <p>Bug-9 - <span id='bug-9-info'></span></p>
+              <p>Bug-10 - <span id='bug-10-info'></span></p>
+              <p>Bug-11 - <span id='bug-11-info'></span></p>
+              <p>Bug-12 - <span id='bug-12-info'></span></p> -->
+            </div>
+
+            <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 2rem;">
+              <button id="controls" class="btn btn-panel btn-lg" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-gamepad pr-2"></i>Controls</button>
+              <button id="nameChange" class="btn btn-panel btn-lg"><i class="fas fa-edit pr-2"></i>Name</button>
+            </div>
+            
+          </div>
+
+        </div>
+
+        <div class="col-6 col-xl-3 d-none d-lg-block my-auto order-xl-3">
+
+          <div class="panel panel-right">
+
+            <div class="panel-content-group">
+              <h5><span id='lobby_1'>Red Player</span> <span class="text-muted" id="playerOneId"></span></h5>
+              <span id="stats_1"></span>
+              
+              <div class="dual-display">
+
+                  <div class="content">
+                    Health:
+                    <div class="progress w-100">
+                      <div class="progress-bar progress-bar-red" style='width: 100%;' id="redHealth" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+    
+                  <div class="content">
+                    Insects:
+                    <div class="bugIcons d-block" id="list-1">
+
+                    </div>
+                  </div>
+                  
+                </div>
+
+            </div>
+  
+            <div class="panel-content-group">
+              <h5><span id='lobby_2'>Blue Player</span> <span class="text-muted" id="playerTwoId"></span></h5>
+              <span id="stats_2"></span>
+
+              <div class="dual-display">
+
+                <div class="content">
+                  Health:
+                  <div class="progress w-100">
+                    <div class="progress-bar progress-bar-blue" style='width: 100%;' id="blueHealth" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+  
+                <div class="content">
+                  Insects:
+                  <div class="bugIcons d-block" id="list-2">
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+  
+            <div class="panel-content-group">
+              <h5><span id='lobby_3'>Green Player</span> <span class="text-muted" id="playerThreeId"></span></h5>
+              <span id="stats_3"></span>
+
+              <div class="dual-display">
+                <div class="content">
+                  Health:
+                  <div class="progress w-100">
+                    <div class="progress-bar progress-bar-green" style='width: 100%;' id="greenHealth" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+  
+                <div class="content">
+                  Insects:
+                  <div class="bugIcons d-block" id="list-3">
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+  
+            <div class="panel-content-group">
+              <h5><span id='lobby_4'>Yellow Player</span> <span class="text-muted" id="playerFourId"></span></h5>
+              <span id="stats_4"></span>
+
+              <div class="dual-display">
+
+                <div class="content">
+                  Health:
+                  <div class="progress w-100">
+                    <div class="progress-bar progress-bar-yellow" style='width: 100%;' id="yellowHealth" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+  
+                <div class="content">
+                  Insects:
+                  <div class="bugIcons d-block" id="list-4">
+
+                  </div>
+                </div>
+                
+              </div>
+
+            </div>
+
+            <div class="space-fill" style="flex-grow: 1;"></div>
+
+            <h5>Debug Controls</h5>
+            <div class="panel-content-group mt-0" id="ad-holder-full">
+              <button onclick="socket.emit( 'resetGame' );" class="btn btn-secondary">Reset</button>
+            </div>
+
+            <h5 class="mt-5">Server Sponser</h5>
+            <div class="panel-content-group mt-2" id="ad-holder-full">
+              <a href="https://cosmicstudios.xyz" target="_blank">
+                <div class="ad-cosmic">
+                  <img src="https://cosmicstudios.xyz/assets/img/profile.svg" height="75px" alt="">
+                </div>
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-12 d-md-none">
+
+            <div id="zone_joystick" class="noselect">
+
+                <div id="debug">
+                    <ul>
+                        <li class="position">
+                            position :
+                            <ul>
+                                <li class="x">x : <span class='data'></span></li>
+                                <li class="y">y : <span class='data'></span></li>
+                            </ul>
+                        </li>
+                        <li class="force">force : <span class='data'></span></li>
+                        <li class="pressure">pressure : <span class='data'></span></li>
+                        <li class="distance">distance : <span class='data'></span></li>
+                        <li class="angle">
+                            angle :
+                            <ul>
+                                <li class="radian">radian : <span class='data'></span></li>
+                                <li class="degree">degree : <span class='data'></span></li>
+                            </ul>
+                        </li>
+                        <li class="direction">
+                            direction :
+                            <ul>
+                                <li class="x">x : <span class='data'></span></li>
+                                <li class="y">y : <span class='data'></span></li>
+                                <li class="angle">angle : <span class='data'></span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="dump"></div>
+                </div>
+    
+                <div style="height: 300px; width: 100%;" class="zone static active noselect">
+                  <h1><div class="circle"></div>nippleJS</h1>
+                  <div class="side-button"></div>
+                </div>
+    
+            </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <img style="display: none;" id="padGreen" src="https://flexboxfroggy.com/images/lilypad-green.svg">
+  <img style="display: none;" id="padYellow" src="https://flexboxfroggy.com/images/lilypad-yellow.svg">
+  <img style="display: none;" id="padRed" src="https://flexboxfroggy.com/images/lilypad-red.svg">
+  <img style="display: none;" id="padBlue" src="assets/img/padBlue.svg">
+
+  <img style="display: none;" id="bug-1" src="assets/img/bug-1.png" width="10">
+  <img style="display: none;" id="bug-2" src="assets/img/bug-2.png" width="30">
+  <img style="display: none;" id="bug-3" src="assets/img/bug-3.png" width="30">
+  <img style="display: none;" id="bug-4" src="assets/img/bug-4.png" width="30">
+  <img style="display: none;" id="bug-5" src="assets/img/bug-5.png" width="10">
+  <img style="display: none;" id="bug-6" src="assets/img/bug-6.png" width="30">
+  <img style="display: none;" id="bug-7" src="assets/img/bug-7.png" width="30">
+  <img style="display: none;" id="bug-8" src="assets/img/bug-8.png" width="30">
+
+  <img style="display: none;" id="powerup-1" src="assets/img/powerup.jpg" width="30">
+  <img style="display: none;" id="health" src="assets/img/health.jpg" width="30">
+  <img style="display: none;" id="stink" src="assets/img/stink.png" width="30">
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-gamepad pr-2"></i>Controls</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+
+            <div class="row">
+
+              <div class="col-12">
+                <img src="./assets/img/controls.png" width="100%" alt="">
+              </div>
+
+              <div class="col-12">
+                <p class="mt-5">Objective: Steal the insects from the other frogs lily pads<br><br>
+
+                  <!-- - Make sure not to get tagged outside your zone to avoid a penality<br><br> -->
+
+                  - Tag players trying to steal your insects to send them packing back to thier pad with a timeout<br><br>
+                  - Avoid being tagged outside your own zone<br><br>
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-panel" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous">
+</script>
+<script 
+  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+  crossorigin="anonymous">
+</script>
+<script>
+  $('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+  })
+</script>
+
+<script src="/dist/nipplejs.js"></script>
+<script src="/static/controls.js"></script>
+<script src="/static/game.js"></script>
+
+
+</html>
