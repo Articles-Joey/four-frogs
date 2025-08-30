@@ -21,7 +21,7 @@
     "bootstrap": "^5.3.7",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
-    "next": "15.3.5",
+    "next": "15.5.2",
     "nipplejs": "^0.10.2",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.10",
