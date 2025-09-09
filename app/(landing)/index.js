@@ -355,6 +355,19 @@ export default function FourFrogsLobbyPage() {
                             Credits
                         </ArticlesButton>
 
+                        <ArticlesButton
+                            className={`w-50`}
+                            small
+                            onClick={() => {
+                                setShowInfoModal({
+                                    game: game_name
+                                })
+                            }}
+                        >
+                            <i className="fab fa-github"></i>
+                            Github
+                        </ArticlesButton>
+
                     </div>
 
                 </div>
