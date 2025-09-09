@@ -233,7 +233,9 @@ const LeftPanelContent = (props) => {
 
                         {!onlineInteractionsWarning &&
                             <div>
-                                <div className='small mb-2'>Online interactions are not rated! There is no way for Articles Media to predict what you'll hear and see online. If you wish to use the chat please accept.</div>
+                                <div className='small mb-2'>
+                                    {`Online interactions are not rated! There is no way for Articles Media to predict what you'll hear and see online. If you wish to use the chat please accept.`}
+                                </div>
                                 <ArticlesButton
                                     small
                                     className="w-100"
