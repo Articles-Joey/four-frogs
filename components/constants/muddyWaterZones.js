@@ -1,24 +1,8 @@
 const muddyWaterZones = [
-    {
-        zone: 'red',
-        x: 100,
-        y: 100,
-    },
-    {
-        zone: 'blue',
-        x: 400,
-        y: 100,
-    },
-    {
-        zone: 'green',
-        x: 100,
-        y: 400,
-    },
-    {
-        zone: 'yellow',
-        x: 400,
-        y: 400,
-    }
-]
+    // { zone: 'Swamp', x: -200, y: -200 },
+    // { zone: 'Murky Marsh', x: 300, y: -150 },
+    // { zone: 'Foggy Fen', x: -100, y: 250 },
+    // { zone: 'Brackish Bog', x: 150, y: 300 },
+];
 
-export default muddyWaterZones
+export default muddyWaterZones;

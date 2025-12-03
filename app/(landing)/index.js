@@ -13,23 +13,15 @@ import dynamic from 'next/dynamic'
 
 import ArticlesButton from '@/components/UI/Button';
 // import SingleInput from '@/components/Articles/SingleInput';
-import { useLocalStorageNew } from '@/hooks/useLocalStorageNew';
+// import { useLocalStorageNew } from '@/hooks/useLocalStorageNew';
 import IsDev from '@/components/UI/IsDev';
 import { useSocketStore } from '@/hooks/useSocketStore';
+import { useStore } from '@/hooks/useStore';
+// import CreditsModal from '@/components/UI/CreditsModal';
 
 // const Ad = dynamic(() => import('components/Ads/Ad'), {
 //     ssr: false,
 // });
-
-const InfoModal = dynamic(
-    () => import('@/components/UI/InfoModal'),
-    { ssr: false }
-)
-
-const SettingsModal = dynamic(
-    () => import('@/components/UI/SettingsModal'),
-    { ssr: false }
-)
 
 // const PrivateGameModal = dynamic(
 //     () => import('@/components/UI/PrivateGameModal'),
@@ -47,7 +39,19 @@ export default function FourFrogsLobbyPage() {
     // const userReduxState = useSelector((state) => state.auth.user_details)
     const userReduxState = false
 
-    const [nickname, setNickname] = useLocalStorageNew("game:nickname", userReduxState.display_name)
+    // const [nickname, setNickname] = useLocalStorageNew("game:nickname", userReduxState.display_name)
+    const nickname = useStore(state => state.nickname)
+    const setNickname = useStore(state => state.setNickname)
+    const _hasHydrated = useStore(state => state._hasHydrated)
+
+    // const showCreditsModal = useStore((state) => state.showCreditsModal)
+    const setShowCreditsModal = useStore((state) => state.setShowCreditsModal)
+
+    // const showInfoModal = useStore((state) => state.showInfoModal)
+    const setShowInfoModal = useStore((state) => state.setShowInfoModal)
+
+    // const showSettingsModal = useStore((state) => state.showSettingsModal)
+    const setShowSettingsModal = useStore((state) => state.setShowSettingsModal)
 
     // const { register, handleSubmit, watch, formState: { errors } } = useForm({
     //     defaultValues: {
@@ -56,9 +60,9 @@ export default function FourFrogsLobbyPage() {
     //     }
     // });
 
-    const [showInfoModal, setShowInfoModal] = useState(false)
-    const [showSettingsModal, setShowSettingsModal] = useState(false)
-    const [showPrivateGameModal, setShowPrivateGameModal] = useState(false)
+    // const [showInfoModal, setShowInfoModal] = useState(false)
+    // const [showSettingsModal, setShowSettingsModal] = useState(false)
+    // const [showPrivateGameModal, setShowPrivateGameModal] = useState(false)
 
     const [lobbyDetails, setLobbyDetails] = useState({
         players: [],
@@ -81,7 +85,7 @@ export default function FourFrogsLobbyPage() {
 
     useEffect(() => {
 
-        setShowInfoModal(localStorage.getItem('game:four-frogs:rulesAnControls') === 'true' ? true : false)
+        // setShowInfoModal(localStorage.getItem('game:four-frogs:rulesAnControls') === 'true' ? true : false)
 
         // if (userReduxState._id) {
         //     console.log("Is user")
@@ -99,17 +103,61 @@ export default function FourFrogsLobbyPage() {
             socket.off('game:four-frogs-landing-details');
         };
 
-    }, [])
+    }, [socket])
 
+    // useEffect(() => {
+
+    //     localStorage.setItem('game:four-frogs:rulesAnControls', showInfoModal)
+
+    // }, [showInfoModal])
+
+    const setRandomNickname = () => {
+        const randomNicknames = [
+            "FroggyMaster",
+            "JumpingJester",
+            "LilyPadLord",
+            "ToadallyAwesome",
+            "CroakCommander",
+            "SwampSurfer",
+            "PondPatrol",
+            "RibbitRanger",
+            "LeapFrogLegend",
+            "TadpoleTitan",
+            "BogBoss",
+            "MarshMonarch",
+            "FlyCatcher",
+            "GreenGlider",
+            "AmphibianAce",
+            "WetlandWarrior",
+            "HopsHero",
+            "SlipperyScout",
+            "MudSkipper",
+            "LotusLeaper"
+        ];
+
+        const randomIndex = Math.floor(Math.random() * randomNicknames.length);
+        setNickname(randomNicknames[randomIndex]);
+    }
+
+    // Only do once so user can set name from nothing without retriggering
+    const [initialRandomName, setInitialRandomName] = useState(false)
     useEffect(() => {
 
-        localStorage.setItem('game:four-frogs:rulesAnControls', showInfoModal)
+        // console.log("nickname", nickname)
+        // console.log("rehydrated", _hasHydrated)
 
-    }, [showInfoModal])
+        if (!nickname && _hasHydrated && !initialRandomName) {
+            console.log("No nickname set, set a random!")
+            setRandomNickname()
+            setInitialRandomName(true)
+        }
+
+    }, [nickname, _hasHydrated])
 
     useEffect(() => {
 
         if (socket.connected) {
+            console.log("Joining four-frogs-landing room")
             socket.emit('join-room', 'game:four-frogs-landing');
         }
 
@@ -123,19 +171,7 @@ export default function FourFrogsLobbyPage() {
 
         <div className="four-frogs-lobby-page">
 
-            {showInfoModal &&
-                <InfoModal
-                    show={showInfoModal}
-                    setShow={setShowInfoModal}
-                />
-            }
-
-            {showSettingsModal &&
-                <SettingsModal
-                    show={showSettingsModal}
-                    setShow={setShowSettingsModal}
-                />
-            }
+            
 
             {/* {showPrivateGameModal &&
                 <PrivateGameModal
@@ -168,21 +204,35 @@ export default function FourFrogsLobbyPage() {
 
                     <div className="card-header">
 
-                        <div className="form-group articles mb-0">
-                            <label htmlFor="nickname">Nickname</label>
-                            {/* <SingleInput
-                                value={nickname}
-                                setValue={setNickname}
-                            /> */}
-                            <input
-                                type="text"
-                                placeholder={"Display name or username"}
-                                value={nickname}
-                                onChange={(e) => {
-                                    setNickname(e.target.value)
-                                }}
-                                className={`form-control form-control-sm`}
-                            />
+                        <div className=''>
+                            <div className="form-group articles mb-0">
+
+                                <label htmlFor="nickname">Nickname</label>
+
+                                {/* <SingleInput
+                                    value={nickname}
+                                    setValue={setNickname}
+                                /> */}
+
+                                <div className='d-flex'>
+                                    <input
+                                        type="text"
+                                        placeholder={"Display name or username"}
+                                        value={nickname}
+                                        onChange={(e) => {
+                                            setNickname(e.target.value)
+                                        }}
+                                        className={`form-control form-control-sm`}
+                                    />
+                                    <ArticlesButton
+                                        onClick={setRandomNickname}
+                                    >
+                                        <i className="fad fa-random me-0"></i>
+                                    </ArticlesButton>
+                                </div>
+
+                            </div>
+
                         </div>
 
                         <div style={{ fontSize: '0.8rem' }}>Visible to all players</div>
@@ -260,31 +310,34 @@ export default function FourFrogsLobbyPage() {
 
                         </div>
 
-                        <div className='small fw-bold  mt-3 mb-1'>Or</div>
-
-                        <div className='d-flex'>
-
-                            <ArticlesButton
-                                className={`w-50`}
-                                onClick={() => {
-                                    // TODO
-                                    alert("Coming Soon!")
-                                }}
-                            >
-                                <i className="fad fa-robot"></i>
-                                Practice
-                            </ArticlesButton>
-
-                            <ArticlesButton
-                                className={`w-50`}
-                                onClick={() => {
-                                    // setShowPrivateGameModal(prev => !prev)
-                                }}
-                            >
-                                <i className="fad fa-lock"></i>
-                                Private Game
-                            </ArticlesButton>
-
+                        {/* TODO - Finish ability to start a practice game against bots or a private game with friends */}
+                        <div className='d-none'>
+                            <div className='small fw-bold  mt-3 mb-1'>Or</div>
+    
+                            <div className='d-flex'>
+    
+                                <ArticlesButton
+                                    className={`w-50`}
+                                    onClick={() => {
+                                        // TODO
+                                        alert("Coming Soon!")
+                                    }}
+                                >
+                                    <i className="fad fa-robot"></i>
+                                    Practice
+                                </ArticlesButton>
+    
+                                <ArticlesButton
+                                    className={`w-50`}
+                                    onClick={() => {
+                                        // setShowPrivateGameModal(prev => !prev)
+                                    }}
+                                >
+                                    <i className="fad fa-lock"></i>
+                                    Private Game
+                                </ArticlesButton>
+    
+                            </div>
                         </div>
 
                         <IsDev className={'mt-3'}>
@@ -320,9 +373,7 @@ export default function FourFrogsLobbyPage() {
                             small
                             className={`w-50`}
                             onClick={() => {
-                                setShowInfoModal({
-                                    game: 'Four Frogs'
-                                })
+                                setShowInfoModal(true)
                             }}
                         >
                             <i className="fad fa-info-square"></i>
@@ -346,27 +397,22 @@ export default function FourFrogsLobbyPage() {
                             className={`w-50`}
                             small
                             onClick={() => {
-                                setShowInfoModal({
-                                    game: game_name
-                                })
+                                setShowCreditsModal(true)
                             }}
                         >
                             <i className="fad fa-users"></i>
                             Credits
                         </ArticlesButton>
 
-                        <ArticlesButton
-                            className={`w-50`}
-                            small
-                            onClick={() => {
-                                setShowInfoModal({
-                                    game: game_name
-                                })
-                            }}
-                        >
-                            <i className="fab fa-github"></i>
-                            Github
-                        </ArticlesButton>
+                        <Link href={"https://github.com/Articles-Joey/four-frogs"} target='_blank' className={`w-50`}>
+                            <ArticlesButton
+                                className={`w-100`}
+                                small
+                            >
+                                <i className="fab fa-github"></i>
+                                Github
+                            </ArticlesButton>
+                        </Link>
 
                     </div>
 

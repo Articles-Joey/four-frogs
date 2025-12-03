@@ -15,6 +15,7 @@ import Zone from './Zone';
 import Ocean from './Ocean';
 import { Sunflower } from './Sunflower';
 import { OrangeFlower } from './OrangeFlower';
+import { useStore } from '@/hooks/useStore';
 
 // import Center from './Center';
 // import Spinner from './Spinner';
@@ -40,7 +41,17 @@ function angle(num) {
 //     </group>
 // );
 
-function GameCanvas({ scale, children, bugs, players, gameState, cameraShakeEnabled }) {
+function GameCanvas({
+    scale,
+    children,
+    bugs,
+    players,
+    // gameState,
+    // cameraShakeEnabled
+}) {
+
+    const gameState = useStore((state) => state.gameState);
+    const cameraShakeEnabled = useStore((state) => state.cameraShakeEnabled);
 
     const [reload, setReload] = useState(false)
 

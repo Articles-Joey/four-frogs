@@ -10,20 +10,65 @@ import ControllerPreview from "@/components/UI/ControllerPreview";
 
 import { useEffect, useRef, useState } from "react";
 import { useSocketStore } from "@/hooks/useSocketStore";
+import { memo } from "react";
+import useFullscreen from "@/hooks/useFullScreen";
+import { useStore } from "@/hooks/useStore";
+
+import { QRCodeCanvas } from 'qrcode.react';
+import { useSearchParams } from "next/navigation";
 
 const LeftPanelContent = (props) => {
+
+    // const {
+    //     room,
+    //     gameState,
+    //     players,
+    //     touchControlsEnabled,
+    //     setTouchControlsEnabled,
+    //     reloadScene,
+    //     controllerState,
+    //     isFullscreen,
+    //     requestFullscreen,
+    //     exitFullscreen,
+    //     setShowMenu,
+    //     // showChat,
+    //     // setShowChat,
+    //     // chatMessages,
+    //     // setChatMessages,
+    //     // chatMessage,
+    //     // setChatMessage,
+    //     renderMode,
+    //     setRenderMode,
+    //     cameraShakeEnabled,
+    //     setCameraShakeEnabled,
+    //     setShowSettingsModal,
+    //     setShowInfoModal,
+    //     setShowInviteModal
+    // } = props;
+
+    const searchParams = useSearchParams()
+    const searchParamsObject = Object.fromEntries(searchParams.entries());
+    const { server_id, server_type } = searchParamsObject
+
+    const { isFullscreen, requestFullscreen, exitFullscreen } = useFullscreen();
+
+    const renderMode = useStore((state) => state.renderMode);
+    const setRenderMode = useStore((state) => state.setRenderMode);
+
+    const touchControlsEnabled = useStore((state) => state.touchControlsEnabled);
+    const setTouchControlsEnabled = useStore((state) => state.setTouchControlsEnabled);
 
     const {
         room,
         gameState,
         players,
-        touchControlsEnabled,
-        setTouchControlsEnabled,
+        // touchControlsEnabled,
+        // setTouchControlsEnabled,
         reloadScene,
         controllerState,
-        isFullscreen,
-        requestFullscreen,
-        exitFullscreen,
+        // isFullscreen,
+        // requestFullscreen,
+        // exitFullscreen,
         setShowMenu,
         // showChat,
         // setShowChat,
@@ -31,14 +76,28 @@ const LeftPanelContent = (props) => {
         // setChatMessages,
         // chatMessage,
         // setChatMessage,
-        renderMode,
-        setRenderMode,
-        cameraShakeEnabled,
-        setCameraShakeEnabled,
-        setShowSettingsModal,
-        setShowInfoModal,
-        setShowInviteModal
-    } = props;
+        // renderMode,
+        // setRenderMode,
+        // cameraShakeEnabled,
+        // setCameraShakeEnabled,
+        // setShowSettingsModal,
+        // setShowInfoModal,
+        // setShowInviteModal
+    } = {
+        gameState: {
+            status: null,
+        }
+    };
+
+    // const showInfoModal = useStore((state) => state.showInfoModal)
+    const setShowInfoModal = useStore((state) => state.setShowInfoModal)
+    const setShowSettingsModal = useStore((state) => state.setShowSettingsModal)
+
+    const cameraShakeEnabled = useStore((state) => state.cameraShakeEnabled);
+    const setCameraShakeEnabled = useStore((state) => state.setCameraShakeEnabled);
+
+    // const showInfoModal = useStore((state) => state.showInfoModal);
+    const setShowInviteModal = useStore((state) => state.setShowInviteModal);
 
     const {
         socket,
@@ -59,6 +118,11 @@ const LeftPanelContent = (props) => {
     const [showChat, setShowChat] = useState(false)
     const [chatMessages, setChatMessages] = useState([])
     const [chatMessage, setChatMessage] = useState('')
+
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     useEffect(() => {
 
@@ -113,6 +177,18 @@ const LeftPanelContent = (props) => {
                     {gameState.status} - {gameState.timer} seconds
                 </span>
 
+            </div>
+
+            <div className="panel-content-group text-center mb-3 p-3">
+                {mounted &&
+                    <QRCodeCanvas
+                        value={
+                            `${window.location.host}/play?server_id=${server_id}`
+                        }
+                        className=''
+                        size={150}
+                    />
+                }
             </div>
 
             <button
@@ -209,7 +285,7 @@ const LeftPanelContent = (props) => {
             {showChat &&
                 <div className="panel-content-group text-dark p-0">
 
-                    <div className='small text-muted p-1 d-flex justify-content-between align-items-center border-bottom border-dark'>
+                    <div className='small p-1 d-flex justify-content-between align-items-center border-bottom border-dark'>
 
                         <div className="fw-bold">
                             Game Chat
@@ -258,11 +334,11 @@ const LeftPanelContent = (props) => {
                                         return (
                                             <div key={chat_i}>
 
-                                                <div className='small text-muted'>
+                                                <div className='small text-secondary'>
                                                     <ArticlesDate date={chat?.date} />
                                                 </div>
 
-                                                <div>{chat?.color} - {chat?.message}</div>
+                                                <div>{chat?.nickname || "?"}({chat?.color}) - {chat?.message}</div>
 
                                             </div>
                                         )
@@ -344,6 +420,9 @@ const LeftPanelContent = (props) => {
                         onClick={() => {
                             setTouchControlsEnabled(false)
                         }}
+                        style={{
+                            opacity: touchControlsEnabled ? 0.5 : 1,
+                        }}
                     >
                         <i className="fad fa-redo"></i>
                         Off
@@ -355,6 +434,9 @@ const LeftPanelContent = (props) => {
                         active={touchControlsEnabled}
                         onClick={() => {
                             setTouchControlsEnabled(true)
+                        }}
+                        style={{
+                            opacity: !touchControlsEnabled ? 0.5 : 1,
                         }}
                     >
                         <i className="fad fa-redo"></i>
@@ -372,7 +454,11 @@ const LeftPanelContent = (props) => {
                     <ArticlesButton
                         variant='four-frogs-primary'
                         className="w-50"
-                        disabled={renderMode == '2D'}
+                        // disabled={renderMode !== '2D'}
+                        active={renderMode === '2D'}
+                        style={{
+                            opacity: renderMode !== '2D' ? 0.5 : 1,
+                        }}
                         onClick={() => {
                             setRenderMode("2D")
                         }}
@@ -383,7 +469,11 @@ const LeftPanelContent = (props) => {
                     <ArticlesButton
                         variant='four-frogs-primary'
                         className="w-50"
-                        disabled={renderMode == '3D'}
+                        // disabled={renderMode !== '3D'}
+                        active={renderMode === '3D'}
+                        style={{
+                            opacity: renderMode !== '3D' ? 0.5 : 1,
+                        }}
                         onClick={() => {
                             setRenderMode("3D")
                         }}
@@ -394,34 +484,34 @@ const LeftPanelContent = (props) => {
                 </div>
             </div>
 
-            <IsDev>
+            {/* <IsDev> */}
 
-                {renderMode == '3D' &&
-                    <div className='mb-2'>
-                        <ArticlesButton
-                            variant='four-frogs-primary'
-                            className="w-50"
-                            onClick={() => {
-                                setCameraShakeEnabled(prev => !prev)
-                            }}
-                        >
-                            <span style={{ fontSize: '0.7rem' }}>Camera Shake</span>
-                            <span className="badge bg-dark ms-1">{cameraShakeEnabled ? 'On' : 'Off'}</span>
-                        </ArticlesButton>
-                        <ArticlesButton
-                            variant='four-frogs-primary'
-                            className="w-50"
-                            onClick={() => {
-                                setCameraShakeEnabled(prev => !prev)
-                            }}
-                        >
-                            <span style={{ fontSize: '0.76rem' }}>Camera Lock</span>
-                            <span className="badge bg-dark ms-1">{cameraShakeEnabled ? 'On' : 'Off'}</span>
-                        </ArticlesButton>
-                    </div>
-                }
+            {renderMode == '3D' &&
+                <div className='mb-2'>
+                    <ArticlesButton
+                        variant='four-frogs-primary'
+                        className="w-50"
+                        onClick={() => {
+                            setCameraShakeEnabled(prev => !prev)
+                        }}
+                    >
+                        <span style={{ fontSize: '0.7rem' }}>Camera Shake</span>
+                        <span className="badge bg-dark ms-1">{cameraShakeEnabled ? 'On' : 'Off'}</span>
+                    </ArticlesButton>
+                    <ArticlesButton
+                        variant='four-frogs-primary'
+                        className="w-50"
+                        onClick={() => {
+                            setCameraShakeEnabled(prev => !prev)
+                        }}
+                    >
+                        <span style={{ fontSize: '0.76rem' }}>Camera Lock</span>
+                        <span className="badge bg-dark ms-1">{cameraShakeEnabled ? 'On' : 'Off'}</span>
+                    </ArticlesButton>
+                </div>
+            }
 
-            </IsDev>
+            {/* </IsDev> */}
 
             {controllerState?.connected &&
                 <div className="panel-content-group p-0 text-dark">
@@ -480,4 +570,4 @@ const LeftPanelContent = (props) => {
     )
 }
 
-export default LeftPanelContent
+export default memo(LeftPanelContent)

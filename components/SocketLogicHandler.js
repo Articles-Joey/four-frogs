@@ -30,21 +30,9 @@ export default function SocketLogicHandler(props) {
     const connected = useSocketStore((state) => state.connected)
     const setConnected = useSocketStore((state) => state.setConnected)
 
-    // const {
-    //     socket,
-    //     // totalUsers,
-    //     setTotalUsers,
-    //     connectSocket
-    // } = useSocketStore(state => ({
-    //     socket: state.socket,
-    //     // totalUsers: state.totalUsers,
-    //     setTotalUsers: state.setTotalUsers,
-    //     connectSocket: state.connectSocket,
-    // }));
-
     const [lastPage, setLastPage] = useState('');
 
-    // const [initialConnectAttempt, setInitialConnectAttempt] = useState(false);
+    const [initialConnectAttempt, setInitialConnectAttempt] = useState(false);
     const initialized = useRef(false)
 
     // const { session, status } = useSession()
@@ -68,16 +56,16 @@ export default function SocketLogicHandler(props) {
         // }))
     }
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if (!initialConnectAttempt) {
+        if (!initialConnectAttempt) {
 
-    //         console.log("Was called twice")
-    //         setInitialConnectAttempt(true)
-    //         connectSocket()
-    //     }
+            console.log("Was called twice")
+            setInitialConnectAttempt(true)
+            connectSocket()
+        }
 
-    // }, [initialConnectAttempt])
+    }, [initialConnectAttempt])
 
     useEffect(() => {
 

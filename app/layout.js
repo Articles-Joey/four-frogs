@@ -10,6 +10,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // import "./globals.css";
 import "@/styles/index.scss";
 import SocketLogicHandler from "@/components/SocketLogicHandler";
+import LayoutClient from './layout-client';
+import PeerHandler from '@/components/PeerHandler';
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -44,6 +46,8 @@ export default function RootLayout({ children }) {
       >
 
         <SocketLogicHandler />
+        <PeerHandler />
+        <LayoutClient />
 
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>

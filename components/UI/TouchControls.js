@@ -3,6 +3,7 @@ import { memo, useEffect, useState } from "react";
 import ArticlesButton from "@/components/UI/Button"
 // import { useControlsStore, useGameStore } from "../hooks/useGameStore"
 import { useTouchControlsStore } from "@/hooks/useTouchControlsStore";
+import { useStore } from "@/hooks/useStore";
 
 const arePropsEqual = (prevProps, nextProps) => {
     // Compare all props for equality
@@ -11,9 +12,12 @@ const arePropsEqual = (prevProps, nextProps) => {
 
 function TouchControlsBase(props) {
 
-    const {
-        touchControlsEnabled,
-    } = props;
+    // const {
+    //     touchControlsEnabled,
+    // } = props;
+
+    const touchControlsEnabled = useStore((state) => state.touchControlsEnabled);
+    const setTouchControlsEnabled = useStore((state) => state.setTouchControlsEnabled);
 
     const [nippleCreated, setNippleCreated] = useState(false)
 

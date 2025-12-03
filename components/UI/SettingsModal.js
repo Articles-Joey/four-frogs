@@ -117,12 +117,12 @@ export default function FourFrogsSettingsModal({
 
                                             <div>
                                                 <div>{obj.action}</div>
-                                                {obj.emote && <div className="span badge bg-dark">Emote</div>}
+                                                {obj.emote && <div className="span badge bg-dark border">Emote</div>}
                                             </div>
 
                                             <div>
 
-                                                <div className="badge badge-hover bg-articles me-1">{obj.defaultKeyboardKey}</div>
+                                                <div className="badge badge-hover bg-articles border me-1">{obj.defaultKeyboardKey}</div>
 
                                                 <ArticlesButton 
                                                     className=""

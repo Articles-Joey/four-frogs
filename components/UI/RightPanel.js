@@ -5,9 +5,11 @@ import IsDev from "@/components/UI/IsDev";
 import ViewUserModal from "@/components/UI/ViewUserModal";
 import { useSocketStore } from "@/hooks/useSocketStore";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { memo, useState } from "react";
 // import { useSelector } from "react-redux";
 import { useParams } from "next/navigation";
+// import powerups from "../powerups";
+import { useStore } from "@/hooks/useStore";
 
 const InviteModal = dynamic(
     () => import('@/components/UI/InviteModal'),
@@ -16,15 +18,39 @@ const InviteModal = dynamic(
 
 const RightPanelContent = (props) => {
 
+    // const {
+    //     gameState,
+    //     players,
+    //     bugs,
+    //     debugTab,
+    //     setDebugTab,
+    //     devDebugPanel,
+    //     setDevDebugPanel
+    // } = props;
+
     const {
         gameState,
         players,
         bugs,
-        debugTab,
-        setDebugTab,
-        devDebugPanel,
-        setDevDebugPanel
-    } = props;
+        // debugTab,
+        // setDebugTab,
+        // devDebugPanel,
+        // setDevDebugPanel
+    } = {
+        gameState: {
+            status: null,
+            insectTrack: [],
+            powerups: [],
+        },
+        bugs: [],
+        players: [],
+        // debugTab: 'Players',
+    };
+
+    const debugTab = useStore((state) => state.debugTab);
+    const setDebugTab = useStore((state) => state.setDebugTab);
+    const devDebugPanel = useStore((state) => state.devDebugPanel);
+    const setDevDebugPanel = useStore((state) => state.setDevDebugPanel);
 
     const {
         socket,
@@ -32,7 +58,11 @@ const RightPanelContent = (props) => {
         socket: state.socket,
     }));
 
-    const [showInviteModal, setShowInviteModal] = useState(false)
+    // const [showInviteModal, setShowInviteModal] = useState(false)
+    // const showInfoModal = useStore((state) => state.showInfoModal);
+
+    const showInviteModal = useStore((state) => state.showInviteModal);
+    const setShowInviteModal = useStore((state) => state.setShowInviteModal);
 
     // const userReduxState = useSelector((state) => state.auth.user_details)
     const userReduxState = false
@@ -227,7 +257,7 @@ const RightPanelContent = (props) => {
                             small
                             active={devDebugPanel}
                             onClick={() => {
-                                setDevDebugPanel(prev => !prev)
+                                setDevDebugPanel(!devDebugPanel)
                             }}
                         >
                             {devDebugPanel ?
@@ -282,4 +312,4 @@ const RightPanelContent = (props) => {
     )
 }
 
-export default RightPanelContent
+export default memo(RightPanelContent)

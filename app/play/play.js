@@ -87,26 +87,27 @@ import LeftPanelContent from '@/components/UI/LeftPanel';
 import RightPanelContent from '@/components/UI/RightPanel';
 import TouchControls from '@/components/UI/TouchControls';
 import { useSocketStore } from '@/hooks/useSocketStore';
+import { useStore } from '@/hooks/useStore';
 
 // const ControllerPreview = dynamic(
 //     () => import('@/components/Games/ControllerPreview'),
 //     { ssr: false }
 // )
 
-const InfoModal = dynamic(
-    () => import('@/components/UI/InfoModal'),
-    { ssr: false }
-)
+// const InfoModal = dynamic(
+//     () => import('@/components/UI/InfoModal'),
+//     { ssr: false }
+// )
 
-const SettingsModal = dynamic(
-    () => import('@/components/UI/SettingsModal'),
-    { ssr: false }
-)
+// const SettingsModal = dynamic(
+//     () => import('@/components/UI/SettingsModal'),
+//     { ssr: false }
+// )
 
-const InviteModal = dynamic(
-    () => import('@/components/UI/InviteModal'),
-    { ssr: false }
-)
+// const InviteModal = dynamic(
+//     () => import('@/components/UI/InviteModal'),
+//     { ssr: false }
+// )
 
 const ArticlesModal = dynamic(
     () => import('@/components/UI/ArticlesModal'),
@@ -130,23 +131,30 @@ export default function FourFrogs() {
 
     const router = useRouter()
     const pathname = usePathname()
+
     const searchParams = useSearchParams()
+    const searchParamsObject = Object.fromEntries(searchParams.entries());
+    const { server_id, server_type } = searchParamsObject
+
     // const params = Object.fromEntries(searchParams.entries());
-    const params = useParams()
-    const room = params?.room
+    // const params = useParams()
+    // const room = params?.room
     // const { room } = router.query
 
     // const chatMessagesRef = useRef()
 
     const { moveDown, moveUp, moveRight, moveLeft, drop } = useKeyboard()
 
-    const [showInfoModal, setShowInfoModal] = useState(false)
-    const [showSettingsModal, setShowSettingsModal] = useState(false)
-    const [showInviteModal, setShowInviteModal] = useState(false)
+    // const [showInfoModal, setShowInfoModal] = useState(false)
+    // const [showSettingsModal, setShowSettingsModal] = useState(false)
+    // const [showInviteModal, setShowInviteModal] = useState(false)
 
     const [players, setPlayers] = useState([])
     const [bugs, setBugs] = useState([])
-    const [gameState, setGameState] = useState({})
+
+    // const [gameState, setGameState] = useState({})
+    const gameState = useStore((state) => state.gameState);
+    const setGameState = useStore((state) => state.setGameState);
 
     const [debugTab, setDebugTab] = useState('Players')
 
@@ -157,9 +165,13 @@ export default function FourFrogs() {
         ]
     })
 
-    const [renderMode, setRenderMode] = useState('2D')
+    // const [renderMode, setRenderMode] = useState('2D')
+    const renderMode = useStore((state) => state.renderMode);
+    const setRenderMode = useStore((state) => state.setRenderMode);
+    const devDebugPanel = useStore((state) => state.devDebugPanel);
+    const setDevDebugPanel = useStore((state) => state.setDevDebugPanel);
 
-    const [devDebugPanel, setDevDebugPanel] = useState(false)
+    // const [devDebugPanel, setDevDebugPanel] = useState(false)
 
     var canvas;
     var context;
@@ -329,9 +341,12 @@ export default function FourFrogs() {
 
         drawZones()
 
-        socket.on(`game:four-frogs-room-${room}`, function (data) {
+        socket.on(`game:four-frogs-room-${server_id}`, function (data) {
 
-            console.log("Four Frogs Game State Update", data)
+            console.log(
+                "Four Frogs Game State Update",
+                // data
+            )
             context.clearRect(0, 0, 800, 800);
 
             setGameState(data.game_state)
@@ -910,7 +925,7 @@ export default function FourFrogs() {
 
         });
 
-    }, [room]);
+    }, [server_id]);
 
     useEffect(() => {
         console.log("moveUp", moveUp)
@@ -927,7 +942,7 @@ export default function FourFrogs() {
         if (socket) {
 
             socket.emit('four-frogs-player-movement', {
-                room, moveDown, moveUp, moveRight, moveLeft, drop
+                server_id, moveDown, moveUp, moveRight, moveLeft, drop
             });
 
         }
@@ -936,7 +951,7 @@ export default function FourFrogs() {
 
     useEffect(() => {
 
-        if (!room || !socket) return;
+        if (!server_id || !socket) return;
 
         const handleGamepadInput = () => {
             const gamepad = navigator.getGamepads()[0]; // Assuming only one controller is connected
@@ -961,7 +976,7 @@ export default function FourFrogs() {
                     console.log("Emit movement shit!");
 
                     socket.emit('four-frogs-player-movement', {
-                        room,
+                        server_id,
                         ...(directions.down && { moveDown: directions.down }),
                         ...(directions.up && { moveUp: directions.up }),
                         ...(directions.right && { moveRight: directions.right }),
@@ -980,7 +995,7 @@ export default function FourFrogs() {
             clearInterval(intervalId);
         };
 
-    }, [room, socket, drop]);
+    }, [server_id, socket, drop]);
 
     useEffect(() => {
 
@@ -992,7 +1007,7 @@ export default function FourFrogs() {
 
                 if (moveDown || moveUp || moveRight || moveLeft) {
                     socket.emit('four-frogs-player-movement', {
-                        room,
+                        server_id,
                         ...(moveDown && { moveDown }),
                         ...(moveUp && { moveUp }),
                         ...(moveRight && { moveRight }),
@@ -1017,17 +1032,17 @@ export default function FourFrogs() {
 
         return () => {
 
-            if (!room || !isMounted) return
+            if (!server_id || !isMounted) return
 
-            console.log("Unmounted?", isMounted, room)
+            console.log("Unmounted?", isMounted, server_id)
 
-            socket.off(`game:four-frogs-room-${room}`);
+            socket.off(`game:four-frogs-room-${server_id}`);
 
             // socket.off('race-game-round-timer');
 
-            socket.emit('leave-room', `game:four-frogs-room-${room}`, {
+            socket.emit('leave-room', `game:four-frogs-room-${server_id}`, {
                 client_version: '1',
-                game_id: room
+                game_id: server_id
             });
             
         }
@@ -1082,14 +1097,14 @@ export default function FourFrogs() {
 
         // let movementEmit;
 
-        if (room && socket && !joinAttempt && isMounted) {
+        if (server_id && socket && !joinAttempt && isMounted) {
 
             console.log("Client trying to join room")
 
             setJoinAttempt(true)
 
-            socket.emit('join-room', `game:four-frogs-room-${room}`, {
-                game_id: room,
+            socket.emit('join-room', `game:four-frogs-room-${server_id}`, {
+                game_id: server_id,
                 nickname: JSON.parse(localStorage.getItem('game:nickname')),
                 client_version: '1',
                 config: {
@@ -1124,7 +1139,7 @@ export default function FourFrogs() {
             // clearInterval(movementEmit)
         }
 
-    }, [socket, joinAttempt, isMounted]);
+    }, [socket, joinAttempt, isMounted, server_id]);
 
     const { isFullscreen, requestFullscreen, exitFullscreen } = useFullscreen();
 
@@ -1146,25 +1161,25 @@ export default function FourFrogs() {
 
     });
 
-    const [cameraShakeEnabled, setCameraShakeEnabled] = useState(false)
+    // const [cameraShakeEnabled, setCameraShakeEnabled] = useState(false)
 
     const [showControllerState, setShowControllerState] = useState(false)
     const [controllerState, setControllerState] = useState(null);
 
     const [showMenu, setShowMenu] = useState(false)
 
-    const [touchControlsEnabled, setTouchControlsEnabled] = useLocalStorageNew("game:touchControlsEnabled", false)
+    // const [touchControlsEnabled, setTouchControlsEnabled] = useLocalStorageNew("game:touchControlsEnabled", false)
 
     let panelProps = {
-        room,
+        room: server_id,
         gameState,
         players,
-        touchControlsEnabled,
-        setTouchControlsEnabled,
+        // touchControlsEnabled,
+        // setTouchControlsEnabled,
         controllerState,
-        isFullscreen,
-        requestFullscreen,
-        exitFullscreen,
+        // isFullscreen,
+        // requestFullscreen,
+        // exitFullscreen,
         setShowMenu,
         // showChat,
         // setShowChat,
@@ -1172,13 +1187,13 @@ export default function FourFrogs() {
         // setChatMessages,
         // chatMessage,
         // setChatMessage,
-        renderMode,
-        setRenderMode,
-        cameraShakeEnabled,
-        setCameraShakeEnabled,
-        setShowSettingsModal,
-        setShowInfoModal,
-        setShowInviteModal,
+        // renderMode,
+        // setRenderMode,
+        // cameraShakeEnabled,
+        // setCameraShakeEnabled,
+        // setShowSettingsModal,
+        // setShowInfoModal,
+        // setShowInviteModal,
     }
 
     return (
@@ -1252,7 +1267,7 @@ export default function FourFrogs() {
                 </ArticlesModal>
             }
 
-            {showInfoModal &&
+            {/* {showInfoModal &&
                 <InfoModal
                     show={showInfoModal}
                     setShow={setShowInfoModal}
@@ -1271,7 +1286,7 @@ export default function FourFrogs() {
                     show={showInviteModal}
                     setShow={setShowInviteModal}
                 />
-            }
+            } */}
 
             <div className="background">
                 <NextImage
@@ -1312,7 +1327,7 @@ export default function FourFrogs() {
                     ></div>
 
                     <LeftPanelContent
-                        {...panelProps}
+                        // {...panelProps}
                     />
 
                 </div>
@@ -1320,7 +1335,7 @@ export default function FourFrogs() {
             </div>
 
             <TouchControls
-                touchControlsEnabled={touchControlsEnabled}
+                // touchControlsEnabled={touchControlsEnabled}
             />
 
             <div className='mobile-players-info card'>
@@ -1329,10 +1344,10 @@ export default function FourFrogs() {
                         gameState,
                         players,
                         bugs,
-                        debugTab,
-                        setDebugTab,
-                        devDebugPanel,
-                        setDevDebugPanel
+                        // debugTab,
+                        // setDebugTab,
+                        // devDebugPanel,
+                        // setDevDebugPanel
                     }}
                 />
             </div>
@@ -1350,8 +1365,8 @@ export default function FourFrogs() {
                             <GameCanvas
                                 bugs={bugs}
                                 players={players}
-                                gameState={gameState}
-                                cameraShakeEnabled={cameraShakeEnabled}
+                                // gameState={gameState}
+                                // cameraShakeEnabled={cameraShakeEnabled}
                             />
                         }
                     </div>
@@ -1368,7 +1383,7 @@ export default function FourFrogs() {
             >
 
                 <LeftPanelContent
-                    {...panelProps}
+                    // {...panelProps}
                 />
 
             </div>
@@ -1380,15 +1395,15 @@ export default function FourFrogs() {
             >
 
                 <RightPanelContent
-                    {...{
-                        gameState,
-                        players,
-                        bugs,
-                        debugTab,
-                        setDebugTab,
-                        devDebugPanel,
-                        setDevDebugPanel
-                    }}
+                    // {...{
+                    //     gameState,
+                    //     players,
+                    //     bugs,
+                    //     debugTab,
+                    //     setDebugTab,
+                    //     devDebugPanel,
+                    //     setDevDebugPanel
+                    // }}
                 />
 
             </div >
