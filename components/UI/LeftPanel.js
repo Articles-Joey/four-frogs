@@ -14,10 +14,11 @@ import { memo } from "react";
 import useFullscreen from "@/hooks/useFullScreen";
 import { useStore } from "@/hooks/useStore";
 
-import { QRCodeCanvas } from 'qrcode.react';
+// import { QRCodeCanvas } from 'qrcode.react';
 import { useSearchParams } from "next/navigation";
+import GameStatus from "./LeftPanel/GameStatus";
 
-const LeftPanelContent = (props) => {
+const LeftPanelContent = () => {
 
     // const {
     //     room,
@@ -58,9 +59,21 @@ const LeftPanelContent = (props) => {
     const touchControlsEnabled = useStore((state) => state.touchControlsEnabled);
     const setTouchControlsEnabled = useStore((state) => state.setTouchControlsEnabled);
 
+    // const gameState = useStore((state) => state.gameState);
+
+    // const showInfoModal = useStore((state) => state.showInfoModal)
+    const setShowInfoModal = useStore((state) => state.setShowInfoModal)
+    const setShowSettingsModal = useStore((state) => state.setShowSettingsModal)
+
+    const cameraShakeEnabled = useStore((state) => state.cameraShakeEnabled);
+    const setCameraShakeEnabled = useStore((state) => state.setCameraShakeEnabled);
+
+    // const showInfoModal = useStore((state) => state.showInfoModal);
+    const setShowInviteModal = useStore((state) => state.setShowInviteModal);
+
     const {
-        room,
-        gameState,
+        // room,
+        // gameState,
         players,
         // touchControlsEnabled,
         // setTouchControlsEnabled,
@@ -84,20 +97,10 @@ const LeftPanelContent = (props) => {
         // setShowInfoModal,
         // setShowInviteModal
     } = {
-        gameState: {
-            status: null,
-        }
+        // gameState: {
+        //     status: null,
+        // }
     };
-
-    // const showInfoModal = useStore((state) => state.showInfoModal)
-    const setShowInfoModal = useStore((state) => state.setShowInfoModal)
-    const setShowSettingsModal = useStore((state) => state.setShowSettingsModal)
-
-    const cameraShakeEnabled = useStore((state) => state.cameraShakeEnabled);
-    const setCameraShakeEnabled = useStore((state) => state.setCameraShakeEnabled);
-
-    // const showInfoModal = useStore((state) => state.showInfoModal);
-    const setShowInviteModal = useStore((state) => state.setShowInviteModal);
 
     const {
         socket,
@@ -119,10 +122,10 @@ const LeftPanelContent = (props) => {
     const [chatMessages, setChatMessages] = useState([])
     const [chatMessage, setChatMessage] = useState('')
 
-    const [mounted, setMounted] = useState(false)
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+    // const [mounted, setMounted] = useState(false)
+    // useEffect(() => {
+    //     setMounted(true)
+    // }, [])
 
     useEffect(() => {
 
@@ -161,49 +164,14 @@ const LeftPanelContent = (props) => {
 
     }, []);
 
+    useEffect(() => {
+        console.log("Remount")
+    });
+
     return (
         <div className="text-dark">
 
-            <div className="panel-content-group text-center mb-3">
-
-                <h5 className="mb-0">Room: {room}</h5>
-                <span
-                    style={{
-                        ...(true && { color: "rgb(255 0 0)" }),
-                        // ...(false && {color: "rgb(0 0 0)"}),
-                        fontWeight: 'bold'
-                    }}
-                >
-                    {gameState.status} - {gameState.timer} seconds
-                </span>
-
-            </div>
-
-            <div className="panel-content-group text-center mb-3 p-3">
-                {mounted &&
-                    <QRCodeCanvas
-                        value={
-                            `${window.location.host}/play?server_id=${server_id}`
-                        }
-                        className=''
-                        size={150}
-                    />
-                }
-            </div>
-
-            <button
-                className='btn btn-four-frogs-primary w-100 mb-1'
-                disabled={gameState.status !== 'In Lobby'}
-                onClick={() => {
-                    socket.emit('four-frogs-start', {
-                        server: room,
-                        settings: {}
-                    });
-                }}
-            >
-                <i className="fad fa-play"></i>
-                <span>Start Game</span>
-            </button>
+            <GameStatus />
 
             <div className='buttons-wrap mb-2'>
 
@@ -258,7 +226,7 @@ const LeftPanelContent = (props) => {
                         setShowInviteModal({
                             type: 'Game',
                             game_name: 'Four Frogs',
-                            server_id: room
+                            server_id: server_id
                         })
                     }}
                 >
@@ -377,7 +345,7 @@ const LeftPanelContent = (props) => {
                                             }
 
                                             socket.emit('four-frogs-player-chat', {
-                                                room,
+                                                server_id,
                                                 data
                                             });
 

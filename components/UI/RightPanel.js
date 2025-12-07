@@ -7,7 +7,7 @@ import { useSocketStore } from "@/hooks/useSocketStore";
 import dynamic from "next/dynamic";
 import { memo, useState } from "react";
 // import { useSelector } from "react-redux";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 // import powerups from "../powerups";
 import { useStore } from "@/hooks/useStore";
 
@@ -17,6 +17,10 @@ const InviteModal = dynamic(
 )
 
 const RightPanelContent = (props) => {
+
+    const searchParams = useSearchParams()
+    const searchParamsObject = Object.fromEntries(searchParams.entries());
+    const { server_id, server_type } = searchParamsObject
 
     // const {
     //     gameState,
@@ -67,8 +71,8 @@ const RightPanelContent = (props) => {
     // const userReduxState = useSelector((state) => state.auth.user_details)
     const userReduxState = false
 
-    const params = useParams()
-    const room = params?.room
+    // const params = useParams()
+    // const room = params?.room
 
     return (
         <div>
@@ -149,7 +153,7 @@ const RightPanelContent = (props) => {
                                             setShowInviteModal({
                                                 type: 'Game',
                                                 game_name: 'Four Frogs',
-                                                server_id: room
+                                                server_id: server_id
                                             })
                                         }}
                                     >

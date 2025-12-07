@@ -1,9 +1,10 @@
 {
   "name": "four-frogs",
+  "description": "4 player capture the objectives game.",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
-    "dev": "next dev --turbopack -p 3018",
+    "dev": "next dev -p 3018",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -20,14 +21,14 @@
     "bootstrap": "^5.3.7",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
-    "next": "16.0.6",
+    "next": "^16",
     "nipplejs": "^0.10.2",
     "peerjs": "^1.5.5",
     "qrcode.react": "^4.2.0",
-    "react": "^19.2.0",
+    "react": "^19",
     "react-bootstrap": "^2.10.10",
     "react-countdown": "^2.3.6",
-    "react-dom": "^19.2.0",
+    "react-dom": "^19",
     "react-hotkeys-hook": "^5.1.0",
     "sass": "^1.94.2",
     "socket.io-client": "^4.8.1",
@@ -36,6 +37,6 @@
   },
   "devDependencies": {
     "eslint": "^9",
-    "eslint-config-next": "16.0.6"
+    "eslint-config-next": "^16"
   }
 }

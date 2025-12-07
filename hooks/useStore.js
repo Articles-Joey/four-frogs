@@ -1,5 +1,6 @@
 import theme from '@/theme'
 import { create } from 'zustand'
+// import { createWithEqualityFn as create } from 'zustand/traditional'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
 export const useStore = create()(
