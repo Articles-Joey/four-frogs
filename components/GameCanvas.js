@@ -294,7 +294,7 @@ function GameCanvas({
                         {/* Powerups */}
                         <group position={[-400 - 20, 0.5, -400 - 20]}>
 
-                            {gameState?.powerups?.active.map(powerup_obj => {
+                            {gameState?.powerups?.active?.map(powerup_obj => {
 
                                 return (
                                     <Powerup

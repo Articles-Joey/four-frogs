@@ -9,9 +9,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // import "./globals.css";
 import "@/styles/index.scss";
+
+import "@articles-media/articles-dev-box/dist/style.css";
+
 import SocketLogicHandler from "@/components/SocketLogicHandler";
 import LayoutClient from './layout-client';
 import PeerHandler from '@/components/PeerHandler';
+import { Suspense } from 'react';
+import DarkModeHandler from '@/components/UI/DarkModeHandler';
+import GlobalClientModals from '@/components/UI/GlobalClientModals';
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -33,11 +39,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
 
       <head>
-        
-        <link
+
+        {/* <link
           rel="stylesheet"
           href={`${process.env.NEXT_PUBLIC_CDN}fonts/fontawsome/css/all.min.css`}
-        />
+        /> */}
 
       </head>
 
@@ -45,9 +51,13 @@ export default function RootLayout({ children }) {
       // className={`${geistSans.variable} ${geistMono.variable}`}
       >
 
-        <SocketLogicHandler />
-        <PeerHandler />
-        <LayoutClient />
+        <Suspense>
+          <SocketLogicHandler />
+          <PeerHandler />
+          <LayoutClient />
+          <GlobalClientModals />
+          <DarkModeHandler />
+        </Suspense>
 
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
