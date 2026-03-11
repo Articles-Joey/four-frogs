@@ -19,7 +19,7 @@
     "@mui/material-nextjs": "^7.3.7",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.2.0",
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "bootstrap": "^5.3.7",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
