@@ -9,8 +9,11 @@ export default function DarkModeHandler({ children }) {
 
     // const theme = useEightBallStore(state => state.theme);
     const darkMode = useStore((state) => state.darkMode);
+    const hasHydrated = useStore((state) => state._hasHydrated);
 
     useEffect(() => {
+
+        if (!hasHydrated) return;
 
         if (darkMode == null) {
             const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -23,7 +26,7 @@ export default function DarkModeHandler({ children }) {
             document.body.setAttribute("data-bs-theme", 'light');
         }
 
-    }, [darkMode]);
+    }, [darkMode, hasHydrated]);
 
     return (
         <>

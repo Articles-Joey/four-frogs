@@ -272,7 +272,7 @@ export default function FourFrogsLobbyPage() {
                         />
                         :
                         <Image
-                            src={`${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/background.jpg`}
+                            src={`/img/background.webp`}
                             alt=""
                             fill
                             style={{ objectFit: 'cover' }}

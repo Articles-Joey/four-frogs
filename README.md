@@ -14,4 +14,13 @@ npm run dev
 
 ## Multiplayer
 
-Aiming to have multiplayer via P2P and Websockets. Websocket backend code is not in this repo or available at this time. P2P code will be included here.
+Multiplayer via websockets using socket.io and an express backend. 
+
+Planning to open source backend code soon.
+
+Also planning to do a peer-to-peer multiplayer method one day.
+
+## Attributions
+
+[Background image - Vector Stock](https://www.vectorstock.com/royalty-free-vector/serene-forest-pond-scene-vector-8116691)  
+[3D Bug Models - Google]()  

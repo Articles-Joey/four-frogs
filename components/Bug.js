@@ -1,17 +1,24 @@
 import React, { useRef } from 'react';
 import { useFrame, useThree } from "@react-three/fiber"
-import { useTexture } from '@react-three/drei';
+import { Text, useTexture } from '@react-three/drei';
 
-const bugImages = [
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-1.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-2.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-3.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-4.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-5.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-6.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-7.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-8.png`
-]
+import { ModelGrasshopper } from '@/components/Models/Grasshopper';
+import { Model as ModelAnt } from '@/components/Models/Ant';
+import { Model as ModelCaterpillar } from '@/components/Models/Caterpillar';
+import { Model as ModelLadybug } from '@/components/Models/Ladybug';
+import { Model as ModelSpider } from '@/components/Models/Spider';
+
+// Map bugType number to component
+const bugTypeComponentMap = {
+    1: ModelAnt,
+    2: ModelCaterpillar,
+    3: ModelGrasshopper,
+    4: ModelLadybug,
+    5: ModelSpider,
+    6: ModelGrasshopper, // Placeholder, update as needed
+    7: ModelGrasshopper, // Placeholder, update as needed
+    8: ModelGrasshopper  // Placeholder, update as needed
+};
 
 export default function Bug(props) {
 
@@ -34,18 +41,32 @@ export default function Bug(props) {
         spriteRef.current.lookAt(camera.position);
     });
 
+    const BugComponent = bugTypeComponentMap[bug.bugType] || null;
     return (
-        <sprite
+        <group
+            position={props.position}
             ref={spriteRef}
-            scale={[40, 40, 40]} // Adjust the scale as needed
-            position={props.position} // Set the initial position in 3D space
-            transparent
         >
-            <spriteMaterial
-                attach="material"
-                // map={texture}
+
+            {/* <Text scale={8}>
+                {bug.bugType}
+            </Text> */}
+
+            {BugComponent && <BugComponent />}
+
+            {/* <sprite
+                ref={spriteRef}
+                scale={[40, 40, 40]} // Adjust the scale as needed
+                position={props.position} // Set the initial position in 3D space
                 transparent
-            />
-        </sprite>
+            >
+                <spriteMaterial
+                    attach="material"
+                    // map={texture}
+                    transparent
+                />
+            </sprite> */}
+
+        </group>
     );
 };

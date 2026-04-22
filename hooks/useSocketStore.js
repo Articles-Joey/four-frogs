@@ -10,12 +10,15 @@ export const useSocketStore = create((set) => ({
     serverUrl: process.env.NEXT_PUBLIC_NODE_SERVER, // Default server URL
     connectSocket: (url) => {
         console.log("[📶Socket] connectSocket called")
-        const newSocket = io(url || process.env.NEXT_PUBLIC_NODE_SERVER, {
+        const newSocket = io(process.env.NEXT_PUBLIC_NODE_SERVER, {
             transports: ["websocket"],
             autoConnect: false,
             reconnection: true,
             reconnectionDelay: 5000,
             reconnectionDelayMax: 10000,
+            query: {
+                client: "four-frogs"
+            }
         });
         newSocket.connect();
         set({ socket: newSocket });

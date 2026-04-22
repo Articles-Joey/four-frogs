@@ -8,14 +8,38 @@ import dynamic from 'next/dynamic'
 import useFullscreen from '@/hooks/useFullScreen';
 
 const bugImages = [
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-1.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-2.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-3.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-4.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-5.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-6.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-7.png`,
-    `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-8.png`
+    {
+        cdn: `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-1.png`,
+        local: '/img/bugs/ant.png'
+    },
+    {
+        cdn: `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-2.png`,
+        local: '/img/bugs/ladybug.png'
+    },
+    {
+        cdn: `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-3.png`,
+        local: '/img/bugs/spider.png'
+    },
+    {
+        cdn: `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-4.png`,
+        local: '/img/bugs/dragonfly.png'
+    },
+    {
+        cdn: `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-5.png`,
+        local: '/img/bugs/snail.png'
+    },
+    {
+        cdn: `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-6.png`,
+        local: '/img/bugs/caterpillar.png'
+    },
+    {
+        cdn: `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-7.png`,
+        local: '/img/bugs/grasshopper.png'
+    },
+    {
+        cdn: `${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/Bugs/bug-8.png`,
+        local: '/img/bugs/butterfly.png'
+    }
 ]
 
 const muddyWaterZoneSize = 300
@@ -329,12 +353,22 @@ export default function FourFrogs() {
         // }
 
         var saved_images = bugImages.map(item => {
+            
             let bug_image = new Image();
-            bug_image.src = item;
+
+            process.env.NODE_ENV === 'development' ?
+                bug_image.src = item.local
+                :
+                bug_image.src = item.cdn;
+
+            // bug_image.src = item.local;
+
             return bug_image
+
             // bug_image.onload = function () {
             //     console.log("Bug loaded")                
             // }
+
         })
 
         drawPads()
@@ -1026,7 +1060,7 @@ export default function FourFrogs() {
 
     }, [socket, moveDown, moveUp, moveRight, moveLeft, drop]);
 
-    const [ isMounted, setIsMounted ] = useState(false)
+    const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
 
@@ -1044,7 +1078,7 @@ export default function FourFrogs() {
                 client_version: '1',
                 game_id: server_id
             });
-            
+
         }
 
     }, [isMounted]);
@@ -1091,7 +1125,7 @@ export default function FourFrogs() {
 
     }, []);
 
-    const [ joinAttempt, setJoinAttempt ] = useState(false)
+    const [joinAttempt, setJoinAttempt] = useState(false)
 
     useEffect(() => {
 
@@ -1327,7 +1361,7 @@ export default function FourFrogs() {
                     ></div>
 
                     <LeftPanelContent
-                        // {...panelProps}
+                    // {...panelProps}
                     />
 
                 </div>
@@ -1335,7 +1369,7 @@ export default function FourFrogs() {
             </div>
 
             <TouchControls
-                // touchControlsEnabled={touchControlsEnabled}
+            // touchControlsEnabled={touchControlsEnabled}
             />
 
             <div className='mobile-players-info card'>
@@ -1365,8 +1399,8 @@ export default function FourFrogs() {
                             <GameCanvas
                                 bugs={bugs}
                                 players={players}
-                                // gameState={gameState}
-                                // cameraShakeEnabled={cameraShakeEnabled}
+                            // gameState={gameState}
+                            // cameraShakeEnabled={cameraShakeEnabled}
                             />
                         }
                     </div>
@@ -1377,13 +1411,13 @@ export default function FourFrogs() {
             {/* Left Panel */}
             <div
                 className="panel panel-left d-none d-lg-flex"
-                style={{ 
+                style={{
                     background: `url(${`${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/bark.jpg`})`
                 }}
             >
 
                 <LeftPanelContent
-                    // {...panelProps}
+                // {...panelProps}
                 />
 
             </div>
@@ -1391,19 +1425,19 @@ export default function FourFrogs() {
             {/* Right Panel */}
             <div
                 className="panel panel-right d-none d-lg-flex"
-                style={{ background: `url(${`${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/bark.jpg`})`}}
+                style={{ background: `url(${`${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/bark.jpg`})` }}
             >
 
                 <RightPanelContent
-                    // {...{
-                    //     gameState,
-                    //     players,
-                    //     bugs,
-                    //     debugTab,
-                    //     setDebugTab,
-                    //     devDebugPanel,
-                    //     setDevDebugPanel
-                    // }}
+                // {...{
+                //     gameState,
+                //     players,
+                //     bugs,
+                //     debugTab,
+                //     setDebugTab,
+                //     devDebugPanel,
+                //     setDevDebugPanel
+                // }}
                 />
 
             </div >
