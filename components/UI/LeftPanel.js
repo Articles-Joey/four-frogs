@@ -3,7 +3,7 @@ import ArticlesDate from "@/components/UI/ArticlesDate";
 // import SingleInput from "@/components/Articles/SingleInput";
 import IsDev from "@/components/UI/IsDev";
 import Link from "next/link";
-import { useLocalStorageNew } from "@/hooks/useLocalStorageNew";
+// import { useLocalStorageNew } from "@/hooks/useLocalStorageNew";
 import ControllerPreview from "@/components/UI/ControllerPreview";
 
 // import ROUTES from 'components/constants/routes';
@@ -19,33 +19,6 @@ import { useSearchParams } from "next/navigation";
 import GameStatus from "./LeftPanel/GameStatus";
 
 const LeftPanelContent = () => {
-
-    // const {
-    //     room,
-    //     gameState,
-    //     players,
-    //     touchControlsEnabled,
-    //     setTouchControlsEnabled,
-    //     reloadScene,
-    //     controllerState,
-    //     isFullscreen,
-    //     requestFullscreen,
-    //     exitFullscreen,
-    //     setShowMenu,
-    //     // showChat,
-    //     // setShowChat,
-    //     // chatMessages,
-    //     // setChatMessages,
-    //     // chatMessage,
-    //     // setChatMessage,
-    //     renderMode,
-    //     setRenderMode,
-    //     cameraShakeEnabled,
-    //     setCameraShakeEnabled,
-    //     setShowSettingsModal,
-    //     setShowInfoModal,
-    //     setShowInviteModal
-    // } = props;
 
     const searchParams = useSearchParams()
     const searchParamsObject = Object.fromEntries(searchParams.entries());
@@ -71,7 +44,7 @@ const LeftPanelContent = () => {
     const cameraLocked = useStore((state) => state.cameraLocked);
     const setCameraLocked = useStore((state) => state.setCameraLocked);
 
-    // const showInfoModal = useStore((state) => state.showInfoModal);
+    const showInviteModal = useStore((state) => state.showInviteModal);
     const setShowInviteModal = useStore((state) => state.setShowInviteModal);
 
     const {
@@ -111,7 +84,7 @@ const LeftPanelContent = () => {
         socket: state.socket,
     }));
 
-    const [onlineInteractionsWarning, setOnlineInteractionsWarning] = useLocalStorageNew("game:onlineInteractionsWarning", false)
+    // const [onlineInteractionsWarning, setOnlineInteractionsWarning] = useLocalStorageNew("game:onlineInteractionsWarning", false)
 
     const chatMessagesRef = useRef()
 
@@ -222,7 +195,8 @@ const LeftPanelContent = () => {
                     <div>Settings</div>
                 </div>
 
-                <div
+                <ArticlesButton
+                    active={showInviteModal}
                     className='btn btn-four-frogs-primary'
                     onClick={() => {
                         // setShowInviteModal(true)
@@ -234,7 +208,7 @@ const LeftPanelContent = () => {
                     }}
                 >
                     <div>Invite</div>
-                </div>
+                </ArticlesButton>
 
                 <ArticlesButton
                     small
@@ -278,7 +252,7 @@ const LeftPanelContent = () => {
 
                     <div className='p-2'>
 
-                        {!onlineInteractionsWarning &&
+                        {/* {!onlineInteractionsWarning &&
                             <div>
                                 <div className='small mb-2'>
                                     {`Online interactions are not rated! There is no way for Articles Media to predict what you'll hear and see online. If you wish to use the chat please accept.`}
@@ -295,9 +269,9 @@ const LeftPanelContent = () => {
                                     <span>Accept Warning</span>
                                 </ArticlesButton>
                             </div>
-                        }
+                        } */}
 
-                        {onlineInteractionsWarning &&
+                        {/* {onlineInteractionsWarning &&
                             <div>
 
                                 <div ref={chatMessagesRef} className='mb-1' style={{ maxHeight: '200px', overflow: 'auto' }}>
@@ -318,12 +292,6 @@ const LeftPanelContent = () => {
 
                                 <div className='d-flex'>
                                     <div className='flex-grow-1'>
-                                        {/* <SingleInput
-                                            small
-                                            value={chatMessage}
-                                            setValue={setChatMessage}
-                                            noMargin
-                                        /> */}
                                         <input
                                             id="room-code"
                                             className="form-control"
@@ -371,7 +339,7 @@ const LeftPanelContent = () => {
                                 </div>
 
                             </div>
-                        }
+                        } */}
 
                     </div>
                 </div>
@@ -507,7 +475,7 @@ const LeftPanelContent = () => {
                         </ArticlesButton>
                     </div>
 
-                    {showControllerState && <div className='p-3'>
+                    {/* {showControllerState && <div className='p-3'>
 
                         <ControllerPreview
                             controllerState={controllerState}
@@ -516,7 +484,7 @@ const LeftPanelContent = () => {
                             maxHeight={300}
                             showPreview={true}
                         />
-                    </div>}
+                    </div>} */}
 
                 </div>
             }

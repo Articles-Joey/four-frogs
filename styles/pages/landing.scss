@@ -1,6 +1,6 @@
 @use "@/styles/components/global.scss" as *;
 
-.four-frogs-lobby-page {
+.landing-page {
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -47,6 +47,7 @@
         top: 0;
         width: 100%;
         height: 100%;
+        z-index: -1;
 
         img {
             // backdrop-filter: blur(8px);

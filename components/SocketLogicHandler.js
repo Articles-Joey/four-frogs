@@ -13,6 +13,7 @@ import { useRouter, usePathname } from 'next/navigation';
 // import axios from "axios";
 
 import { useSocketStore } from "@/hooks/useSocketStore";
+import { useStore } from '@/hooks/useStore';
 
 // SocketContextControl
 export default function SocketLogicHandler(props) {
@@ -31,6 +32,9 @@ export default function SocketLogicHandler(props) {
     const setConnected = useSocketStore((state) => state.setConnected)
 
     const [lastPage, setLastPage] = useState('');
+
+    const lobbyDetails = useStore(state => state.lobbyDetails)
+    const setLobbyDetails = useStore(state => state.setLobbyDetails)
 
     const [initialConnectAttempt, setInitialConnectAttempt] = useState(false);
     const initialized = useRef(false)
@@ -243,4 +247,41 @@ export default function SocketLogicHandler(props) {
         socket?.connected,
         // userReduxState._id
     ]);
+
+    useEffect(() => {
+
+        if (pathname !== '/') return;
+
+        // setShowInfoModal(localStorage.getItem('game:four-frogs:rulesAnControls') === 'true' ? true : false)
+
+        // if (userReduxState._id) {
+        //     console.log("Is user")
+        // }
+
+        socket.on('game:four-frogs-landing-details', function (msg) {
+            console.log('game:four-frogs-landing-details', msg)
+
+            if (JSON.stringify(msg) !== JSON.stringify(lobbyDetails)) {
+                setLobbyDetails(msg)
+            }
+        });
+
+        return () => {
+            socket.off('game:four-frogs-landing-details');
+        };
+
+    }, [socket, pathname])
+
+    useEffect(() => {
+
+        if (socket.connected) {
+            console.log("Joining four-frogs-landing room")
+            socket.emit('join-room', 'game:four-frogs-landing');
+        }
+
+        return function cleanup() {
+            socket.emit('leave-room', 'game:four-frogs-landing')
+        };
+
+    }, [socket.connected]);
 }

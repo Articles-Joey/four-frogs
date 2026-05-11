@@ -22,9 +22,7 @@ Also planning to do a peer-to-peer multiplayer method one day.
 
 ## TODO 
 
-Finish importing LandingTemplate and GameMenu
-Import render mode settings into settingsmodal
-Fix InviteModal logic
+Fix InviteModal logic  
 
 ## Attributions
 

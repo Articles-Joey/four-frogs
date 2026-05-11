@@ -5,16 +5,12 @@ const randomNicknameConfig = {
   type: 'Basic',
   parts: [
     [
-      'Savvy', 'Wealthy', 'Ambitious', 'Bold', 'Ruthless', 'Shrewd', 'Enterprising', 'Opportunistic',
-      'Prosperous', 'Astute', 'Visionary', 'Risky', 'Dynamic', 'Influential', 'Powerful', 'Resourceful',
-      'Strategic', 'Cunning', 'Decisive', 'Dominant', 'Competitive', 'Innovative', 'Aggressive', 'Expansive',
-      'Lucrative', 'Profitable', 'Global', 'Elite', 'Privileged', 'Industrial'
+      'Froggy', 'Jumping', 'LilyPad', 'Toadally', 'Croak', 'Swamp', 'Pond', 'Ribbit', 'LeapFrog', 'Tadpole',
+      'Bog', 'Marsh', 'Fly', 'Green', 'Amphibian', 'Wetland', 'Hops', 'Slippery', 'Mud', 'Lotus'
     ],
     [
-      'Tycoon', 'Magnate', 'Mogul', 'Investor', 'Broker', 'Baron', 'Capitalist', 'Financier',
-      'Entrepreneur', 'Executive', 'Trader', 'Banker', 'Industrialist', 'Shareholder', 'Speculator', 'CEO',
-      'Chairman', 'Director', 'Venture', 'Merchant', 'Oligarch', 'Boss', 'Owner', 'Manager',
-      'CFO', 'Founder', 'Partner', 'Stockholder', 'Dealer', 'Rainmaker'
+      'Master', 'Jester', 'Lord', 'Awesome', 'Commander', 'Surfer', 'Patrol', 'Ranger', 'Legend', 'Titan',
+      'Boss', 'Monarch', 'Catcher', 'Glider', 'Ace', 'Warrior', 'Hero', 'Scout', 'Skipper', 'Leaper'
     ]
   ]
 };

@@ -66,7 +66,7 @@ export default function LayoutClient({ children }) {
                         }
                     }}
                     infoModalConfig={{
-                        previewImage: "img/preview.webp",
+                        previewImage: "img/game-preview.jpg",
                     }}
                 />
             </Suspense>
