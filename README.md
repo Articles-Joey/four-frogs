@@ -20,6 +20,12 @@ Planning to open source backend code soon.
 
 Also planning to do a peer-to-peer multiplayer method one day.
 
+## TODO 
+
+Finish importing LandingTemplate and GameMenu
+Import render mode settings into settingsmodal
+Fix InviteModal logic
+
 ## Attributions
 
 [Background image - Vector Stock](https://www.vectorstock.com/royalty-free-vector/serene-forest-pond-scene-vector-8116691)  

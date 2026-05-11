@@ -11,7 +11,7 @@ import ControllerPreview from "@/components/UI/ControllerPreview";
 import { useEffect, useRef, useState } from "react";
 import { useSocketStore } from "@/hooks/useSocketStore";
 import { memo } from "react";
-import useFullscreen from "@/hooks/useFullScreen";
+import useFullscreen from '@articles-media/articles-dev-box/useFullscreen';
 import { useStore } from "@/hooks/useStore";
 
 // import { QRCodeCanvas } from 'qrcode.react';
@@ -67,6 +67,9 @@ const LeftPanelContent = () => {
 
     const cameraShakeEnabled = useStore((state) => state.cameraShakeEnabled);
     const setCameraShakeEnabled = useStore((state) => state.setCameraShakeEnabled);
+
+    const cameraLocked = useStore((state) => state.cameraLocked);
+    const setCameraLocked = useStore((state) => state.setCameraLocked);
 
     // const showInfoModal = useStore((state) => state.showInfoModal);
     const setShowInviteModal = useStore((state) => state.setShowInviteModal);
@@ -460,7 +463,7 @@ const LeftPanelContent = () => {
                         variant='four-frogs-primary'
                         className="w-50"
                         onClick={() => {
-                            setCameraShakeEnabled(prev => !prev)
+                            setCameraShakeEnabled(!cameraShakeEnabled)
                         }}
                     >
                         <span style={{ fontSize: '0.7rem' }}>Camera Shake</span>
@@ -469,12 +472,13 @@ const LeftPanelContent = () => {
                     <ArticlesButton
                         variant='four-frogs-primary'
                         className="w-50"
+                        // disabled={true}
                         onClick={() => {
-                            setCameraShakeEnabled(prev => !prev)
+                            setCameraLocked(!cameraLocked)
                         }}
                     >
                         <span style={{ fontSize: '0.76rem' }}>Camera Lock</span>
-                        <span className="badge bg-dark ms-1">{cameraShakeEnabled ? 'On' : 'Off'}</span>
+                        <span className="badge bg-dark ms-1">{cameraLocked ? 'On' : 'Off'}</span>
                     </ArticlesButton>
                 </div>
             }

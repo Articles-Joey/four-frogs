@@ -5,7 +5,7 @@ import NextImage from 'next/image'
 import { useSearchParams, useRouter, usePathname, useParams } from 'next/navigation';
 import dynamic from 'next/dynamic'
 
-import useFullscreen from '@/hooks/useFullScreen';
+import useFullscreen from '@articles-media/articles-dev-box/useFullscreen';
 
 const bugImages = [
     {
@@ -353,7 +353,7 @@ export default function FourFrogs() {
         // }
 
         var saved_images = bugImages.map(item => {
-            
+
             let bug_image = new Image();
 
             process.env.NODE_ENV === 'development' ?

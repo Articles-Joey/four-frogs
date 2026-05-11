@@ -1,15 +1,75 @@
 "use client"
-import { useEffect } from "react";
+import { Suspense } from 'react';
 
-import dynamic from "next/dynamic";
+import packageInfo from '@/package.json';
 
+import { useStore } from '@/hooks/useStore';
+import { useAudioStore } from '@/hooks/useAudioStore';
+import useTouchControlsStore from '@/hooks/useTouchControlsStore';
+import { useSocketStore } from '@/hooks/useSocketStore';
+
+import DarkModeHandler from "@articles-media/articles-dev-box/DarkModeHandler";
 import GlobalBody from '@articles-media/articles-dev-box/GlobalBody';
+import GlobalClientModals from '@articles-media/articles-dev-box/GlobalClientModals';
 
 export default function LayoutClient({ children }) {
 
     return (
         <>
             <GlobalBody />
+            <DarkModeHandler
+                useStore={useStore}
+            />
+            <Suspense>
+                <GlobalClientModals
+                    useStore={useStore}
+                    useAudioStore={useAudioStore}
+                    useTouchControlsStore={useTouchControlsStore}
+                    useSocketStore={useSocketStore}
+
+                    packageInfo={packageInfo}
+                    settingsModalConfig={{
+                        tabs: {
+                            'Graphics': {
+                                darkMode: true,
+                                landingAnimation: true
+                            },
+                            'Audio': {
+                                sliders: [
+                                    ...useAudioStore.getState().audioSettings ?
+                                        Object.keys(useAudioStore.getState().audioSettings).filter(key => key !== "enabled").map(key => ({
+                                            key,
+                                            label: key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                                        }))
+                                        :
+                                        [],
+                                ]
+                            },
+                            'Controls': {
+                                touchControls: true
+                                // defaultKeyBindings: {
+                                //     // moveUp: "W",
+                                //     // moveDown: "S",
+                                //     // moveLeft: "A",
+                                //     // moveRight: "D",
+                                // }
+                            },
+                            'Multiplayer': {
+                                serverUrl: true,
+                            },
+                            'Other': {
+                                toontownMode: true,
+                            },
+                            'Debug': {
+                                children: <></>,
+                            }
+                        }
+                    }}
+                    infoModalConfig={{
+                        previewImage: "img/preview.webp",
+                    }}
+                />
+            </Suspense>
         </>
     );
 }

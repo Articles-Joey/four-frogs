@@ -1,6 +1,6 @@
 {
   "name": "four-frogs",
-  "description": "4 player capture the objectives game.",
+  "description": "Four player capture the flag game. Each player gets three bugs to start, if you lose all your bugs and you are eliminated.",
   "version": "0.2.0",
   "private": false,
   "scripts": {
@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@articles-media/articles-dev-box": "^1.0.26",
+    "@articles-media/articles-dev-box": "^1.1.6",
     "@articles-media/articles-gamepad-helper": "^0.0.13",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-next": "^16.1.6"
   }
 }

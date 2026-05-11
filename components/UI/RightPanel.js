@@ -11,10 +11,10 @@ import { useParams, useSearchParams } from "next/navigation";
 // import powerups from "../powerups";
 import { useStore } from "@/hooks/useStore";
 
-const InviteModal = dynamic(
-    () => import('@/components/UI/InviteModal'),
-    { ssr: false }
-)
+// const InviteModal = dynamic(
+//     () => import('@/components/UI/InviteModal'),
+//     { ssr: false }
+// )
 
 const RightPanelContent = (props) => {
 
@@ -77,12 +77,12 @@ const RightPanelContent = (props) => {
     return (
         <div>
 
-            {showInviteModal &&
+            {/* {showInviteModal &&
                 <InviteModal
                     show={showInviteModal}
                     setShow={setShowInviteModal}
                 />
-            }
+            } */}
 
             <div className="players-info-wrap">
                 {[

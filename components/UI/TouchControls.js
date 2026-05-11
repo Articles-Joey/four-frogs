@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from "react";
 
 import ArticlesButton from "@/components/UI/Button"
 // import { useControlsStore, useGameStore } from "../hooks/useGameStore"
-import { useTouchControlsStore } from "@/hooks/useTouchControlsStore";
+import useTouchControlsStore from "@/hooks/useTouchControlsStore";
 import { useStore } from "@/hooks/useStore";
 
 const arePropsEqual = (prevProps, nextProps) => {
