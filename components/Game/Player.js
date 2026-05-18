@@ -14,6 +14,7 @@ export default function Player(props) {
     let muddyWaterZoneLookup = muddyWaterZones?.find(obj => obj.zone == player.homeZone)
 
     const playerRef = useRef();
+    const smoothedPosition = useRef(props.position ? [...props.position] : [0, 0, 0]);
 
     const cameraAngle = Math.PI / 2;
 
@@ -29,15 +30,37 @@ export default function Player(props) {
 
     // Use the useFrame hook to update the camera position based on the player's position
     useFrame(({ camera }) => {
-        const cameraDistance = 100; // Adjust this distance as needed
+        if (!playerRef.current || !props.position) return;
+
+        const LERP_FACTOR = 0.15;
+        const SNAP_THRESHOLD = 500;
+
+        const target = props.position;
+        const current = smoothedPosition.current;
+
+        const dx = target[0] - current[0];
+        const dy = target[1] - current[1];
+        const dz = (target[2] ?? 0) - (current[2] ?? 0);
+        const distSq = dx * dx + dy * dy + dz * dz;
+
+        if (distSq > SNAP_THRESHOLD * SNAP_THRESHOLD) {
+            // Snap instantly for teleports / respawns
+            smoothedPosition.current = [...target];
+        } else {
+            smoothedPosition.current[0] += dx * LERP_FACTOR;
+            smoothedPosition.current[1] += dy * LERP_FACTOR;
+            smoothedPosition.current[2] = (current[2] ?? 0) + dz * LERP_FACTOR;
+        }
+
+        playerRef.current.position.set(
+            smoothedPosition.current[0],
+            smoothedPosition.current[1],
+            smoothedPosition.current[2] ?? 0
+        );
+
+        const cameraDistance = 100;
         const x = playerRef.current.position.x / 0.25 + cameraDistance * Math.cos(cameraAngle);
         const y = playerRef.current.position.y / 0.25 + cameraDistance * Math.sin(cameraAngle);
-
-        // camera.position.set(x, y, camera.position.z);
-        // camera.lookAt(playerRef.current.position.x, playerRef.current.position.y, 0);
-
-        // camera.position.copy(playerRef.current.position);
-        // camera.lookAt(playerRef.current.position.x, playerRef.current.position.y, 0);
     });
 
     return (
@@ -62,7 +85,6 @@ export default function Player(props) {
             {/* Actual Player */}
             <group
                 ref={playerRef}
-                position={props.position}
             // rotation={props.rotation}
             >
 

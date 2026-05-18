@@ -1,11 +1,11 @@
 import { NearestFilter, RepeatWrapping, TextureLoader } from "three";
 
-const texture = new TextureLoader().load(`${process.env.NEXT_PUBLIC_CDN}games/Race Game/grass.jpg`)
+const texture = new TextureLoader().load(`textures/Grass/Poliigon_GrassPatchyGround_4585_BaseColor.jpg`)
 
 function GrassPlane(props) {
 
-    const width = 1600 || props.width; // Set the width of the plane
-    const height = 800 || props.height; // Set the height of the plane
+    const width = props.width || 1600 ; // Set the width of the plane
+    const height = props.height || 1600 ; // Set the height of the plane
 
     texture.magFilter = NearestFilter;
     texture.wrapS = RepeatWrapping

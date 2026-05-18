@@ -1360,23 +1360,25 @@ export default function FourFrogs() {
             </div>
 
             <div className='game-panel'>
-                <div className='ratio ratio-1x1 canvas-container'>
+                <div className='canvas-container'>
 
-                    <div className={`${renderMode == '3D' && 'd-none'}`}>
-                        <canvas id="static-canvas"></canvas>
-                        <canvas id="canvas"></canvas>
-                    </div>
+                    {renderMode == '3D' &&
+                        <div className={`${renderMode == '3D' && 'd-none'}`}>
+                            <canvas id="static-canvas"></canvas>
+                            <canvas id="canvas"></canvas>
+                        </div>
+                    }
 
-                    <div className={`${renderMode == '2D' && 'd-none'}`}>
-                        {renderMode == '3D' &&
-                            <GameCanvas
-                                bugs={bugs}
-                                // players={players}
-                            // gameState={gameState}
-                            // cameraShakeEnabled={cameraShakeEnabled}
-                            />
-                        }
-                    </div>
+                    {/* <div className={`${renderMode == '2D' && 'd-none'}`}> */}
+                    {renderMode == '3D' &&
+                        <GameCanvas
+                        // bugs={bugs}
+                        // players={players}
+                        // gameState={gameState}
+                        // cameraShakeEnabled={cameraShakeEnabled}
+                        />
+                    }
+                    {/* </div> */}
 
                 </div>
             </div>

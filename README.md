@@ -6,7 +6,9 @@ Four player capture the flag game. Each player gets three bugs to start, if you 
 
 ## Getting Started
 
-First, run the development server:
+First you will need to setup a .env file from the .env.sample provided.
+
+Then development server can be run:
 
 ```bash
 npm run dev
@@ -19,6 +21,10 @@ Multiplayer via websockets using socket.io and an express backend.
 Planning to open source backend code soon.
 
 Also planning to do a peer-to-peer multiplayer method one day.
+
+## Scripts
+
+In the scripts folder is reset_public and sync_to_s3. This is only for Articles Media usage. Allows for putting public folder to CloudFront to lower Vercel charges for the public facing site.
 
 ## TODO 
 

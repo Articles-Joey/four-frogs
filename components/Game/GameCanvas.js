@@ -17,6 +17,9 @@ import { Sunflower } from '@/components/Game/Sunflower';
 import { OrangeFlower } from '@/components/Game/OrangeFlower';
 import { useStore } from '@/hooks/useStore';
 import { useGameStore } from '@/hooks/useGameStore';
+import SandDune from './SandDune';
+import Trees from './Trees';
+import GrassBlades from './GrassBlades';
 
 // import Center from './Center';
 // import Spinner from './Spinner';
@@ -88,14 +91,21 @@ function GameCanvas({
                         <Stats className="stats-overlay" />
                     </>}
 
-                    <hemisphereLight color="white" groundColor="blue" intensity={1.2} />
+                    <hemisphereLight color="white" groundColor="white" intensity={1.2} />
+
+                    <ambientLight intensity={1} />
 
                     {/* <spotLight position={[50, 50, 20]} angle={0.15} penumbra={1} color={'red'} />
                     <spotLight position={[-50, 50, -20]} angle={0.15} penumbra={1} color={'green'} /> */}
 
                     <spotLight position={[10, 200, 10]} angle={0.5} intensity={15000} penumbra={1} color={'white'} />
 
-                    <Sky />
+                    <Sky 
+                        // distance={450000}
+                        sunPosition={[100, 200, 100]}
+                        inclination={0.5}
+                        azimuth={0.25}
+                    />
 
                     {showGrid &&
                         <>
@@ -107,51 +117,29 @@ function GameCanvas({
                         </>
                     }
 
+                    <SandDune innerSquare={87} outerSquare={150} height={5} segments={150} />
+
+                    <GrassBlades />
+
+                    <Trees
+                        innerSquare={200}
+                        outerSquare={400}
+                        count={80}
+                    // TreeComponent={MyCustomTree} <-- optional override
+                    />
+
                     <group scale={0.25}>
 
-                        {[...Array(5)].map((item, i) => {
-                            return (
-                                <Tree
-                                    key={i}
-                                    scale={10}
-                                    position={[((i - 2) * 200), 50, -500]}
-                                />
-                            )
-                        })}
-
-                        <group
-                            position={[0, 1, -600]}
-                        >
-                            {[...Array(7)].map((item, i) => {
-                                return (
-                                    <Tree
-                                        key={i}
-                                        scale={5}
-                                        position={[((i - 3) * 200), 100, -500]}
-                                    />
-                                )
-                            })}
-                        </group>
-
-                        <group
-                            position={[0, 1, -900]}
-                        >
-                            {[...Array(9)].map((item, i) => {
-                                return (
-                                    <Tree
-                                        key={i}
-                                        scale={5}
-                                        position={[((i - 4.3) * 200), 100, -500]}
-                                    />
-                                )
-                            })}
-                        </group>
-
                         <group scale={2}>
-                            <GrassPlane rotation={[-Math.PI / 2, 0, 0]} position={[0, 50, -800]} />
+                            <GrassPlane
+                                rotation={[-Math.PI / 2, 0, 0]}
+                                position={[0, -1, 0]}
+                                width={1000 * 2}
+                                height={1000 * 2}
+                            />
                         </group>
 
-                        <group scale={20} position={[-420, 50, -400]}>
+                        <group scale={20} position={[-420, 15, -400]}>
 
                             {[...Array(9)].map((item, i) => {
                                 return (
@@ -164,7 +152,7 @@ function GameCanvas({
 
                         </group>
 
-                        <group scale={20} position={[420, 50, -400]}>
+                        <group scale={20} position={[420, 15, -400]}>
 
                             {[...Array(9)].map((item, i) => {
                                 return (
@@ -178,12 +166,12 @@ function GameCanvas({
                         </group>
 
                         {/* Bowl - Front Back  */}
-                        <GrassPlane rotation={[-Math.PI / 3, 0, 0]} position={[0, -1, -400]} />
-                        <GrassPlane rotation={[-Math.PI / 1.5, 0, 0]} position={[0, -1, 400]} />
+                        {/* <GrassPlane rotation={[-Math.PI / 3, 0, 0]} position={[0, -1, -400]} />
+                        <GrassPlane rotation={[-Math.PI / 1.5, 0, 0]} position={[0, -1, 400]} /> */}
 
                         {/* Bowl - Left Right */}
-                        <GrassPlane rotation={[-Math.PI / 2, -Math.PI / 4, Math.PI / 2]} position={[400, -1, 0]} />
-                        <GrassPlane rotation={[-Math.PI / 2, Math.PI / 4, Math.PI / 2]} position={[-400, -1, 0]} />
+                        {/* <GrassPlane rotation={[-Math.PI / 2, -Math.PI / 4, Math.PI / 2]} position={[400, -1, 0]} />
+                        <GrassPlane rotation={[-Math.PI / 2, Math.PI / 4, Math.PI / 2]} position={[-400, -1, 0]} /> */}
 
                         <group position={[200, 0, 200]}>
                             <Ocean position={[-200, -1, -200]} />
