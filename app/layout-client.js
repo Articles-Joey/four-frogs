@@ -67,6 +67,19 @@ export default function LayoutClient({ children }) {
                     }}
                     infoModalConfig={{
                         previewImage: "img/game-preview.jpg",
+                        appendContent: <div className='mt-3'>
+                            <h5>Controls</h5>
+                            <p>
+                                Can be customized in the settings.
+                            </p>
+                            <img 
+                            src={`${process.env.NEXT_PUBLIC_CDN}games/Four Frogs/controls.png`} 
+                            style={{
+                                width: '100%',
+                                objectFit: 'contain'
+                            }} 
+                            />
+                        </div>
                     }}
                 />
             </Suspense>

@@ -4,10 +4,10 @@ import { Modal } from "react-bootstrap"
 
 import powerups from "@/components/powerups";
 
-import ArticlesSwitch from "@/components/Articles/ArticlesSwitch";
+import ArticlesSwitch from "@/components/UI/ArticlesSwitch";
 import ArticlesButton from "@/components/UI/Button";
 
-export default function FourFrogsPrivateGameModal({
+export default function PrivateGameModal({
     show,
     setShow,
 }) {

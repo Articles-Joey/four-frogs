@@ -55,7 +55,7 @@ export const useStore = create()(
       touchControlsEnabled: false,
       setTouchControlsEnabled: (value) => set({ touchControlsEnabled: value }),
 
-      cameraShakeEnabled: true,
+      cameraShakeEnabled: false,
       setCameraShakeEnabled: (value) => set({ cameraShakeEnabled: value }),
 
       cameraLocked: false,
@@ -77,6 +77,9 @@ export const useStore = create()(
 
       devDebugPanel: false,
       setDevDebugPanel: (value) => set({ devDebugPanel: value }),
+
+      showPrivateGameModal: false,
+      setShowPrivateGameModal: (value) => set({ showPrivateGameModal: value }),
 
     }),
     {

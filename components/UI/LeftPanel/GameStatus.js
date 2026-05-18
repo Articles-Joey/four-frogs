@@ -1,3 +1,4 @@
+import { useGameStore } from "@/hooks/useGameStore";
 import { useSocketStore } from "@/hooks/useSocketStore";
 import { useStore } from "@/hooks/useStore";
 import { useSearchParams } from "next/navigation";
@@ -7,9 +8,9 @@ export default function GameStatus() {
 
     const searchParams = useSearchParams()
     const searchParamsObject = Object.fromEntries(searchParams.entries());
-    const { server_id, server_type } = searchParamsObject
+    const { server, server_type } = searchParamsObject
 
-    const gameState = useStore((state) => state.gameState);
+    const gameState = useGameStore((state) => state.gameState);
 
     const [mounted, setMounted] = useState(false)
     useEffect(() => {
@@ -27,7 +28,7 @@ export default function GameStatus() {
 
             <div className="panel-content-group text-center mb-3">
 
-                <h5 className="mb-0">Room: {server_id}</h5>
+                <h5 className="mb-0">Room: {server}</h5>
                 <span
                     style={{
                         ...(true && { color: "rgb(255 0 0)" }),
@@ -56,8 +57,8 @@ export default function GameStatus() {
                 className='btn btn-four-frogs-primary w-100 mb-1'
                 disabled={gameState.status !== 'In Lobby'}
                 onClick={() => {
-                    socket.emit('four-frogs-start', {
-                        server: server_id,
+                    socket.emit(`game:${process.env.NEXT_PUBLIC_GAME_KEY}-start`, {
+                        server: server,
                         settings: {}
                     });
                 }}

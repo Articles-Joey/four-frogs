@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import { useFrame } from '@react-three/fiber';
 import Bug from './Bug';
-import muddyWaterZones from './constants/muddyWaterZones';
+import muddyWaterZones from '@/components/constants/muddyWaterZones';
 import { Billboard, Text } from '@react-three/drei';
 
 const frogSize = 50

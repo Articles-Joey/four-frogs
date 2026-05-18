@@ -93,45 +93,18 @@ function isMoving(movementPayload) {
     return Object.values(movementPayload).some((value) => value === true);
 }
 
-// import ROUTES from 'components/constants/routes';
-// import Link from 'next/link';
-// import ViewUserModal from '@/components/user/ViewUserModal/ViewUserModal';
-
 import { useKeyboard } from "@/hooks/useKeyboard"
 import powerups from '@/components/powerups';
 import ArticlesButton from '@/components/UI/Button';
 import ordinal_suffix_of from '@/util/ordinalSuffix';
-// import IsDev from '@/components/IsDev';
 import { useHotkeys } from 'react-hotkeys-hook';
-// import { useLocalStorageNew } from '@/hooks/useLocalStorageNew';
-// import SingleInput from '@/components/Articles/SingleInput';
-// import ArticlesDate from '@/components/Articles/Date';
 import muddyWaterZones from '@/components/constants/muddyWaterZones';
 import LeftPanelContent from '@/components/UI/LeftPanel';
 import RightPanelContent from '@/components/UI/RightPanel';
 import TouchControls from '@/components/UI/TouchControls';
 import { useSocketStore } from '@/hooks/useSocketStore';
 import { useStore } from '@/hooks/useStore';
-
-// const ControllerPreview = dynamic(
-//     () => import('@/components/Games/ControllerPreview'),
-//     { ssr: false }
-// )
-
-// const InfoModal = dynamic(
-//     () => import('@/components/UI/InfoModal'),
-//     { ssr: false }
-// )
-
-// const SettingsModal = dynamic(
-//     () => import('@/components/UI/SettingsModal'),
-//     { ssr: false }
-// )
-
-// const InviteModal = dynamic(
-//     () => import('@/components/UI/InviteModal'),
-//     { ssr: false }
-// )
+import { useGameStore } from '@/hooks/useGameStore';
 
 const ArticlesModal = dynamic(
     () => import('@/components/UI/ArticlesModal'),
@@ -139,7 +112,7 @@ const ArticlesModal = dynamic(
 )
 
 const GameCanvas = dynamic(
-    () => import('@/components/GameCanvas'),
+    () => import('@/components/Game/GameCanvas'),
     { ssr: false }
 )
 
@@ -177,8 +150,8 @@ export default function FourFrogs() {
     const [bugs, setBugs] = useState([])
 
     // const [gameState, setGameState] = useState({})
-    const gameState = useStore((state) => state.gameState);
-    const setGameState = useStore((state) => state.setGameState);
+    const gameState = useGameStore((state) => state.gameState);
+    // const setGameState = useGameStore((state) => state.setGameState);
 
     const [debugTab, setDebugTab] = useState('Players')
 
@@ -383,7 +356,7 @@ export default function FourFrogs() {
             )
             context.clearRect(0, 0, 800, 800);
 
-            setGameState(data.game_state)
+            // setGameState(data.game_state)
             setBugs(data.game_state.bugs)
             setPlayers(data.players)
 
@@ -1375,9 +1348,9 @@ export default function FourFrogs() {
             <div className='mobile-players-info card'>
                 <RightPanelContent
                     {...{
-                        gameState,
-                        players,
-                        bugs,
+                        // gameState,
+                        // players,
+                        // bugs,
                         // debugTab,
                         // setDebugTab,
                         // devDebugPanel,
@@ -1398,7 +1371,7 @@ export default function FourFrogs() {
                         {renderMode == '3D' &&
                             <GameCanvas
                                 bugs={bugs}
-                                players={players}
+                                // players={players}
                             // gameState={gameState}
                             // cameraShakeEnabled={cameraShakeEnabled}
                             />

@@ -1,21 +1,22 @@
 import { memo, useEffect, useState } from 'react';
 
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Sky, CameraShake } from '@react-three/drei'
+import { OrbitControls, Sky, CameraShake, Stats } from '@react-three/drei'
 
-import Tree from '@/components/Tree'
+import Tree from '@/components/Game/Tree'
 
 import { useHotkeys } from 'react-hotkeys-hook';
-import GrassPlane from './Ground';
-import Bug from './Bug';
-import Player from './Player';
-import Pad from './Pad';
+import GrassPlane from '@/components/Game/Ground';
+import Bug from '@/components/Game/Bug';
+import Player from '@/components/Game/Player';
+import Pad from '@/components/Game/Pad';
 import Powerup from './Powerup';
-import Zone from './Zone';
+import Zone from '@/components/Game/Zone';
 import Ocean from './Ocean';
-import { Sunflower } from './Sunflower';
-import { OrangeFlower } from './OrangeFlower';
+import { Sunflower } from '@/components/Game/Sunflower';
+import { OrangeFlower } from '@/components/Game/OrangeFlower';
 import { useStore } from '@/hooks/useStore';
+import { useGameStore } from '@/hooks/useGameStore';
 
 // import Center from './Center';
 // import Spinner from './Spinner';
@@ -42,16 +43,19 @@ function angle(num) {
 // );
 
 function GameCanvas({
-    scale,
-    children,
+    // scale,
+    // children,
     bugs,
-    players,
+    // players,
     // gameState,
     // cameraShakeEnabled
 }) {
 
-    const gameState = useStore((state) => state.gameState);
+    const gameState = useGameStore((state) => state.gameState);
+    const players = useGameStore((state) => state.gameState.players);
+
     const cameraShakeEnabled = useStore((state) => state.cameraShakeEnabled);
+    const showStats = useStore((state) => state?.debugConfig?.showStats);
 
     const [reload, setReload] = useState(false)
 
@@ -78,6 +82,10 @@ function GameCanvas({
         <>
             {!reload &&
                 <Canvas camera={{ position: [0, 200, 200], fov: 50 }}>
+
+                    {showStats && <>
+                        <Stats className="stats-overlay" />
+                    </>}
 
                     <hemisphereLight color="white" groundColor="blue" intensity={1.2} />
 

@@ -183,7 +183,7 @@ const LeftPanelContent = () => {
                         })
                     }}
                 >
-                    <div>Info & Controls</div>
+                    <div>Info</div>
                 </div>
 
                 <div
