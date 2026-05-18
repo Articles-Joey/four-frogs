@@ -6,11 +6,21 @@ Files: .\Ladybug.glb [463.13KB] > F:\My Documents\Sites\games\four-frogs\public\
 
 import React from 'react'
 import { useGLTF } from '@react-three/drei'
+import { degToRad } from 'three/src/math/MathUtils.js'
 
-export function Model(props) {
+export function ModelLadybug(props) {
   const { nodes, materials } = useGLTF('models/Ladybug-transformed.glb')
   return (
-    <group {...props} dispose={null}>
+    <group
+      {...props}
+      dispose={null}
+      scale={props.scale || 30}
+      rotation={[
+        degToRad(60),
+        degToRad(90),
+        0
+      ]}
+    >
       <mesh geometry={nodes['Node-Mesh'].geometry} material={materials.lambert2SG} />
       <mesh geometry={nodes['Node-Mesh_1'].geometry} material={materials.lambert3SG} />
     </group>

@@ -7,7 +7,7 @@ Files: .\Ant.glb [50.36KB] > F:\My Documents\Sites\games\four-frogs\public\model
 import React from 'react'
 import { useGLTF } from '@react-three/drei'
 
-export function Model(props) {
+export function ModelAnt(props) {
   const { nodes, materials } = useGLTF('models/Ant-transformed.glb')
   return (
     <group {...props} dispose={null}>

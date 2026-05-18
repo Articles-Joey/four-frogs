@@ -7,10 +7,10 @@ Files: .\Spider.glb [81.21KB] > F:\My Documents\Sites\games\four-frogs\public\mo
 import React from 'react'
 import { useGLTF } from '@react-three/drei'
 
-export function Model(props) {
+export function ModelSpider(props) {
   const { nodes, materials } = useGLTF('models/Spider-transformed.glb')
   return (
-    <group {...props} dispose={null} scale={0.1}>
+    <group {...props} dispose={null} scale={props.scale || 0.1}>
       <mesh geometry={nodes['Cube041-Mesh'].geometry} material={materials['1A1A1A']} />
       <mesh geometry={nodes['Cube041-Mesh_1'].geometry} material={materials.F44336} />
     </group>

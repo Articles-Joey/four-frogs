@@ -3,10 +3,10 @@ import { useFrame, useThree } from "@react-three/fiber"
 import { Text, useTexture } from '@react-three/drei';
 
 import { ModelGrasshopper } from '@/components/Models/Grasshopper';
-import { Model as ModelAnt } from '@/components/Models/Ant';
-import { Model as ModelCaterpillar } from '@/components/Models/Caterpillar';
-import { Model as ModelLadybug } from '@/components/Models/Ladybug';
-import { Model as ModelSpider } from '@/components/Models/Spider';
+import { ModelAnt } from '@/components/Models/Ant';
+import { ModelCaterpillar } from '@/components/Models/Caterpillar';
+import { ModelLadybug } from '@/components/Models/Ladybug';
+import { ModelSpider } from '@/components/Models/Spider';
 
 // Map bugType number to component
 const bugTypeComponentMap = {

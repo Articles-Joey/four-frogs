@@ -45,7 +45,7 @@ function angle(num) {
 function GameCanvas({
     // scale,
     // children,
-    bugs,
+    // bugs,
     // players,
     // gameState,
     // cameraShakeEnabled
@@ -53,6 +53,7 @@ function GameCanvas({
 
     const gameState = useGameStore((state) => state.gameState);
     const players = useGameStore((state) => state.gameState.players);
+    const bugs = useGameStore((state) => state.gameState.bugs);
 
     const cameraShakeEnabled = useStore((state) => state.cameraShakeEnabled);
     const showStats = useStore((state) => state?.debugConfig?.showStats);
@@ -228,7 +229,7 @@ function GameCanvas({
                         {/* Players */}
                         <group position={[-400 + 25, 26, -400 + 25]}>
 
-                            {players.map((server_player_obj, bug_index) => {
+                            {players?.map((server_player_obj, bug_index) => {
 
                                 var player = server_player_obj?.fourFrogs;
 
@@ -279,7 +280,7 @@ function GameCanvas({
                         {/* Bugs */}
                         <group position={[-400 + 25, 26, -400 + 25]}>
 
-                            {bugs.map((server_bug_obj, bug_index) => {
+                            {bugs?.map((server_bug_obj, bug_index) => {
 
                                 if (!server_bug_obj || server_bug_obj.heldBy) {
                                     // No server data on bug yet

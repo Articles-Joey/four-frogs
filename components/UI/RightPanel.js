@@ -10,6 +10,7 @@ import { memo, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 // import powerups from "../powerups";
 import { useStore } from "@/hooks/useStore";
+import { useGameStore } from "@/hooks/useGameStore";
 
 // const InviteModal = dynamic(
 //     () => import('@/components/UI/InviteModal'),
@@ -20,7 +21,7 @@ const RightPanelContent = (props) => {
 
     const searchParams = useSearchParams()
     const searchParamsObject = Object.fromEntries(searchParams.entries());
-    const { server_id, server_type } = searchParamsObject
+    const { server, server_type } = searchParamsObject
 
     // const {
     //     gameState,
@@ -32,24 +33,28 @@ const RightPanelContent = (props) => {
     //     setDevDebugPanel
     // } = props;
 
-    const {
-        gameState,
-        players,
-        bugs,
-        // debugTab,
-        // setDebugTab,
-        // devDebugPanel,
-        // setDevDebugPanel
-    } = {
-        gameState: {
-            status: null,
-            insectTrack: [],
-            powerups: [],
-        },
-        bugs: [],
-        players: [],
-        // debugTab: 'Players',
-    };
+    const gameState = useGameStore((state) => state.gameState);
+    const players = useGameStore((state) => state.gameState.players);
+    const bugs = useGameStore((state) => state.gameState.bugs);
+
+    // const {
+    //     // gameState,
+    //     // players,
+    //     // bugs,
+    //     // debugTab,
+    //     // setDebugTab,
+    //     // devDebugPanel,
+    //     // setDevDebugPanel
+    // } = {
+    //     gameState: {
+    //         status: null,
+    //         insectTrack: [],
+    //         powerups: [],
+    //     },
+    //     bugs: [],
+    //     players: [],
+    //     // debugTab: 'Players',
+    // };
 
     const debugTab = useStore((state) => state.debugTab);
     const setDebugTab = useStore((state) => state.setDebugTab);
@@ -100,7 +105,7 @@ const RightPanelContent = (props) => {
                     }
                 ].map((item, player_index) => {
 
-                    let player_lookup = players.find(player => player.fourFrogs.homeZone == item.player_key.toLowerCase())
+                    let player_lookup = players?.find(player => player.fourFrogs.homeZone == item.player_key.toLowerCase())
 
                     const numberOfIcons = Math.ceil(player_lookup?.fourFrogs?.health / 20);
 
@@ -153,7 +158,7 @@ const RightPanelContent = (props) => {
                                             setShowInviteModal({
                                                 type: 'Game',
                                                 game_name: 'Four Frogs',
-                                                server_id: server_id
+                                                server_id: server
                                             })
                                         }}
                                     >

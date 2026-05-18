@@ -8,10 +8,10 @@ import React from 'react'
 import { useGLTF } from '@react-three/drei'
 import { degToRad } from 'three/src/math/MathUtils.js'
 
-export function Model(props) {
+export function ModelCaterpillar(props) {
   const { nodes, materials } = useGLTF('models/Caterpillar-transformed.glb')
   return (
-    <group {...props} dispose={null} scale={10} rotation={[
+    <group {...props} dispose={null} scale={props.scale || 10} rotation={[
       0,
       degToRad(90),
       0

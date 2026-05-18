@@ -11,7 +11,7 @@ export default function Player(props) {
 
     const { player, bugs } = props
 
-    let muddyWaterZoneLookup = muddyWaterZones.find(obj => obj.zone == player.homeZone)
+    let muddyWaterZoneLookup = muddyWaterZones?.find(obj => obj.zone == player.homeZone)
 
     const playerRef = useRef();
 
@@ -44,7 +44,7 @@ export default function Player(props) {
         <group position={[0, heightAdjustment, 0]}>
 
             {/* Muddy Water zone if powerup active on player */}
-            {player.powerup == "Muddy Water" &&
+            {(player.powerup == "Muddy Water" && muddyWaterZoneLookup) &&
                 <group position={[0, -20, 0]}>
 
                     <mesh position={[muddyWaterZoneLookup.x + 125, 0, muddyWaterZoneLookup.y + 125]}>

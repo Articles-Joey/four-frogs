@@ -389,7 +389,7 @@ export default function FourFrogs() {
                     ]
 
                     let playerColor = playerIndexes[index].player_key
-                    let playerLookup = data.players.find(player_obj => player_obj.fourFrogs.zone == playerColor.toLowerCase())
+                    let playerLookup = data.players?.find(player_obj => player_obj.fourFrogs.zone == playerColor.toLowerCase())
 
                     builtList.push({
                         ...playerLookup,
@@ -435,7 +435,7 @@ export default function FourFrogs() {
             }
 
             // Draw PLayers
-            data.players.map(server_player_obj => {
+            data.players?.map(server_player_obj => {
 
                 // console.log(server_player_obj)
                 // return
