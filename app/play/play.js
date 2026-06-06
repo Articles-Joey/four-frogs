@@ -94,7 +94,7 @@ function isMoving(movementPayload) {
 }
 
 import { useKeyboard } from "@/hooks/useKeyboard"
-import powerups from '@/components/powerups';
+import powerups from '@/components/constants/powerups';
 import ArticlesButton from '@/components/UI/Button';
 import ordinal_suffix_of from '@/util/ordinalSuffix';
 import { useHotkeys } from 'react-hotkeys-hook';

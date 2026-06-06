@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Modal } from "react-bootstrap"
 
-import powerups from "@/components/powerups";
+import powerups from "@/components/constants/powerups";
 
 import ArticlesSwitch from "@/components/UI/ArticlesSwitch";
 import ArticlesButton from "@/components/UI/Button";
