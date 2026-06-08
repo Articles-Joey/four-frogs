@@ -13,6 +13,7 @@ import RotatingMascot from '@/components/UI/RotatingMascot';
 import ArticlesButton from '@/components/UI/Button';
 import PrivateGameModal from '@/components/UI/PrivateGameModal';
 import IsDev from '@/components/UI/IsDev';
+import LandingBackgroundAnimation from '@/components/Game/LandingBackgroundAnimation';
 
 export default function FourFrogsLobbyPage() {
 
@@ -22,13 +23,35 @@ export default function FourFrogsLobbyPage() {
 
     return (
         <>
-            {showPrivateGameModal && <PrivateGameModal show={showPrivateGameModal} setShow={setShowPrivateGameModal} />}
+            {showPrivateGameModal &&
+                <PrivateGameModal
+                    show={showPrivateGameModal}
+                    setShow={setShowPrivateGameModal}
+                />
+            }
             <PageTemplateLandingPage
                 useSocketStore={useSocketStore}
                 useStore={useStore}
                 RotatingMascot={RotatingMascot}
                 Link={Link}
                 logoImage={"img/thumbnail.webp"}
+                LandingBackgroundAnimation={
+                    <LandingBackgroundAnimation />
+                }
+                heroOverride={
+                    darkMode ?
+                        <img
+                            src="img/hero-dark.webp"
+                            alt="Hero Image"
+                            className="w-100"
+                        />
+                        :
+                        <img
+                            src="img/hero.webp"
+                            alt="Hero Image"
+                            className="w-100"
+                        />
+                }
                 // disableHero={true}
                 // CardBodyOverride={<></>}
                 // LandingBackgroundAnimation={<></>}
@@ -48,18 +71,20 @@ export default function FourFrogsLobbyPage() {
                                 }}
                             >
                                 Custom Games
-                            </ArticlesButton>  
+                            </ArticlesButton>
                         </IsDev>
-                    </>                  
+                    </>
                 }
                 // singlePlayerConfig={{}}
                 multiplayerConfig={{
                     type: "WebSocket",
                     // comingSoon: true,
-                    defaultServers: 4,
+                    defaultServers: 2,
                     privateServerSupport: false,
+                    onlinePlayersTemplate: "2.0",
+
                 }}
-                // brandingTextClass="jaro-primary"
+            // brandingTextClass="jaro-primary"
             />
         </>
     );

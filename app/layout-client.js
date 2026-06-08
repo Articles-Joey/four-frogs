@@ -58,7 +58,7 @@ export default function LayoutClient({ children }) {
                                 serverUrl: true,
                             },
                             'Other': {
-                                toontownMode: true,
+                                // toontownMode: true,
                             },
                             'Debug': {
                                 children: <></>,

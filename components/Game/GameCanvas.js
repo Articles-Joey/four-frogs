@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, Suspense, useEffect, useState } from 'react';
 
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Sky, CameraShake, Stats } from '@react-three/drei'
@@ -46,12 +46,7 @@ function angle(num) {
 // );
 
 function GameCanvas({
-    // scale,
-    // children,
-    // bugs,
-    // players,
-    // gameState,
-    // cameraShakeEnabled
+    landingAnimationMode = false
 }) {
 
     const gameState = useGameStore((state) => state.gameState);
@@ -60,6 +55,7 @@ function GameCanvas({
 
     const cameraShakeEnabled = useStore((state) => state.cameraShakeEnabled);
     const showStats = useStore((state) => state?.debugConfig?.showStats);
+    const darkMode = useStore((state) => state.darkMode);
 
     const [reload, setReload] = useState(false)
 
@@ -91,21 +87,38 @@ function GameCanvas({
                         <Stats className="stats-overlay" />
                     </>}
 
-                    <hemisphereLight color="white" groundColor="white" intensity={1.2} />
+                    {darkMode ?
+                        <>
+                            {/* <hemisphereLight color="white" groundColor="white" intensity={.8} /> */}
 
-                    <ambientLight intensity={1} />
+                            <ambientLight intensity={0.7} />
 
-                    {/* <spotLight position={[50, 50, 20]} angle={0.15} penumbra={1} color={'red'} />
-                    <spotLight position={[-50, 50, -20]} angle={0.15} penumbra={1} color={'green'} /> */}
+                            {/* <spotLight position={[10, 200, 10]} angle={0.5} intensity={15000} penumbra={1} color={'white'} /> */}
 
-                    <spotLight position={[10, 200, 10]} angle={0.5} intensity={15000} penumbra={1} color={'white'} />
+                            <Sky
+                                // distance={450000}
+                                sunPosition={[100, -1, 100]}
+                                inclination={0.5}
+                                azimuth={0.25}
+                            />
+                            
+                        </>
+                        :
+                        <>
+                            <hemisphereLight color="white" groundColor="white" intensity={1.2} />
 
-                    <Sky 
-                        // distance={450000}
-                        sunPosition={[100, 200, 100]}
-                        inclination={0.5}
-                        azimuth={0.25}
-                    />
+                            <ambientLight intensity={1} />
+
+                            <spotLight position={[10, 200, 10]} angle={0.5} intensity={15000} penumbra={1} color={'white'} />
+
+                            <Sky
+                                // distance={450000}
+                                sunPosition={[100, 200, 100]}
+                                inclination={0.5}
+                                azimuth={0.25}
+                            />
+                        </>
+                    }
 
                     {showGrid &&
                         <>
@@ -117,195 +130,203 @@ function GameCanvas({
                         </>
                     }
 
-                    <SandDune innerSquare={87} outerSquare={150} height={5} segments={150} />
+                    <Suspense>
+                        <SandDune innerSquare={87} outerSquare={150} height={5} segments={150} />
+                    </Suspense>
 
-                    <GrassBlades />
+                    <Suspense>
+                        <GrassBlades />
+                    </Suspense>
 
-                    <Trees
-                        innerSquare={200}
-                        outerSquare={400}
-                        count={80}
-                    // TreeComponent={MyCustomTree} <-- optional override
-                    />
+                    <Suspense>
+                        <Trees
+                            innerSquare={200}
+                            outerSquare={400}
+                            count={80}
+                        // TreeComponent={MyCustomTree} <-- optional override
+                        />
+                    </Suspense>
 
-                    <group scale={0.25}>
+                    <Suspense>
+                        <group scale={0.25}>
 
-                        <group scale={2}>
-                            <GrassPlane
-                                rotation={[-Math.PI / 2, 0, 0]}
-                                position={[0, -1, 0]}
-                                width={1000 * 2}
-                                height={1000 * 2}
-                            />
+                            <group scale={2}>
+                                <GrassPlane
+                                    rotation={[-Math.PI / 2, 0, 0]}
+                                    position={[0, -1, 0]}
+                                    width={1000 * 2}
+                                    height={1000 * 2}
+                                />
+                            </group>
+
+                            <group scale={20} position={[-420, 15, -400]}>
+
+                                {[...Array(9)].map((item, i) => {
+                                    return (
+                                        <OrangeFlower
+                                            key={i}
+                                            position={[0, 0, (i * 5)]}
+                                        />
+                                    )
+                                })}
+
+                            </group>
+
+                            <group scale={20} position={[420, 15, -400]}>
+
+                                {[...Array(9)].map((item, i) => {
+                                    return (
+                                        <Sunflower
+                                            key={i}
+                                            position={[0, 0, (i * 5)]}
+                                        />
+                                    )
+                                })}
+
+                            </group>
+
+                            {/* Bowl - Front Back  */}
+                            {/* <GrassPlane rotation={[-Math.PI / 3, 0, 0]} position={[0, -1, -400]} />
+                            <GrassPlane rotation={[-Math.PI / 1.5, 0, 0]} position={[0, -1, 400]} /> */}
+
+                            {/* Bowl - Left Right */}
+                            {/* <GrassPlane rotation={[-Math.PI / 2, -Math.PI / 4, Math.PI / 2]} position={[400, -1, 0]} />
+                            <GrassPlane rotation={[-Math.PI / 2, Math.PI / 4, Math.PI / 2]} position={[-400, -1, 0]} /> */}
+
+                            <group position={[200, 0, 200]}>
+                                <Ocean position={[-200, -1, -200]} />
+                            </group>
+
+                            {/* Zones */}
+                            <group position={[-200, 1, -200]}>
+                                <Zone color='red' position={[0, 0, 0]} />
+                                <Zone color='blue' position={[400, 0, 0]} />
+                                <Zone color='green' position={[0, 0, 400]} />
+                                <Zone color='yellow' position={[400, 0, 400]} />
+                            </group>
+
+                            {/* Pads */}
+                            <group position={[-300, 1.25, -300]}>
+
+                                <Pad
+                                    position={[0, 0, 0]}
+                                    // rotation={[-Math.PI / 2, 0, Math.PI / 4.5]}
+                                    color={'Red'}
+                                />
+
+                                <Pad
+                                    position={[600, 0, 0]}
+                                    // rotation={[-Math.PI / 2, 0, -Math.PI / 4.5]}
+                                    color={'Blue'}
+                                />
+
+                                <Pad
+                                    position={[0, 0, 600]}
+                                    // rotation={[-Math.PI / 2, 0, Math.PI / 1.3]}
+                                    color={'Green'}
+                                />
+
+                                <Pad
+                                    position={[600, 0, 600]}
+                                    // rotation={[-Math.PI / 2, 0, -Math.PI / 1.3]}
+                                    color={'Yellow'}
+                                />
+
+                            </group>
+
+                            {/* Players */}
+                            <group position={[-400 + 25, 26, -400 + 25]}>
+
+                                {players?.map((server_player_obj, bug_index) => {
+
+                                    var player = server_player_obj?.fourFrogs;
+
+                                    if (!server_player_obj || server_player_obj.heldBy) {
+                                        // No server data on bug yet
+                                        // Bugs being held get rendered with the user carrying it
+                                        return
+                                    }
+
+                                    return (
+                                        <Player
+                                            position={[player.x, 0, player.y]}
+                                            key={bug_index}
+                                            player={player}
+                                            color={player.homeZone}
+                                            bugs={bugs}
+                                        />
+                                    )
+
+                                })}
+
+                                {/* <Player
+                                    position={[0, 0, 0]}
+                                    rotation={[0, Math.PI / 4.5, 0]}
+                                    color={'Red'}
+                                />
+    
+                                <Player
+                                    position={[10, 0, 0]}
+                                    rotation={[0, -Math.PI / 4.5, 0]}
+                                    color={'Blue'}
+                                />
+    
+                                <Player
+                                    position={[0, 0, 10]}
+                                    rotation={[0, Math.PI / 1.3, 0]}
+                                    color={'Green'}
+                                />
+    
+                                <Player
+                                    position={[10, 0, 10]}
+                                    rotation={[0, -Math.PI / 1.3, 0]}
+                                    color={'Yellow'}
+                                /> */}
+
+                            </group>
+
+                            {/* Bugs */}
+                            <group position={[-400 + 25, 26, -400 + 25]}>
+
+                                {bugs?.map((server_bug_obj, bug_index) => {
+
+                                    if (!server_bug_obj || server_bug_obj.heldBy) {
+                                        // No server data on bug yet
+                                        // Bugs being held get rendered with the user carrying it
+                                        return
+                                    }
+
+                                    return (
+                                        <Bug
+                                            position={[server_bug_obj.x, 0, server_bug_obj.y]}
+                                            bug={server_bug_obj}
+                                            key={bug_index}
+                                        />
+                                    )
+
+                                })}
+
+                            </group>
+
+                            {/* Powerups */}
+                            <group position={[-400 - 20, 0.5, -400 - 20]}>
+
+                                {gameState?.powerups?.active?.map(powerup_obj => {
+
+                                    return (
+                                        <Powerup
+                                            key={powerup_obj.id}
+                                            powerup={powerup_obj}
+                                            position={[powerup_obj.x, 20, powerup_obj.y]}
+                                        />
+                                    )
+
+                                })}
+
+                            </group>
+
                         </group>
-
-                        <group scale={20} position={[-420, 15, -400]}>
-
-                            {[...Array(9)].map((item, i) => {
-                                return (
-                                    <OrangeFlower
-                                        key={i}
-                                        position={[0, 0, (i * 5)]}
-                                    />
-                                )
-                            })}
-
-                        </group>
-
-                        <group scale={20} position={[420, 15, -400]}>
-
-                            {[...Array(9)].map((item, i) => {
-                                return (
-                                    <Sunflower
-                                        key={i}
-                                        position={[0, 0, (i * 5)]}
-                                    />
-                                )
-                            })}
-
-                        </group>
-
-                        {/* Bowl - Front Back  */}
-                        {/* <GrassPlane rotation={[-Math.PI / 3, 0, 0]} position={[0, -1, -400]} />
-                        <GrassPlane rotation={[-Math.PI / 1.5, 0, 0]} position={[0, -1, 400]} /> */}
-
-                        {/* Bowl - Left Right */}
-                        {/* <GrassPlane rotation={[-Math.PI / 2, -Math.PI / 4, Math.PI / 2]} position={[400, -1, 0]} />
-                        <GrassPlane rotation={[-Math.PI / 2, Math.PI / 4, Math.PI / 2]} position={[-400, -1, 0]} /> */}
-
-                        <group position={[200, 0, 200]}>
-                            <Ocean position={[-200, -1, -200]} />
-                        </group>
-
-                        {/* Zones */}
-                        <group position={[-200, 1, -200]}>
-                            <Zone color='red' position={[0, 0, 0]} />
-                            <Zone color='blue' position={[400, 0, 0]} />
-                            <Zone color='green' position={[0, 0, 400]} />
-                            <Zone color='yellow' position={[400, 0, 400]} />
-                        </group>
-
-                        {/* Pads */}
-                        <group position={[-300, 1.25, -300]}>
-
-                            <Pad
-                                position={[0, 0, 0]}
-                                // rotation={[-Math.PI / 2, 0, Math.PI / 4.5]}
-                                color={'Red'}
-                            />
-
-                            <Pad
-                                position={[600, 0, 0]}
-                                // rotation={[-Math.PI / 2, 0, -Math.PI / 4.5]}
-                                color={'Blue'}
-                            />
-
-                            <Pad
-                                position={[0, 0, 600]}
-                                // rotation={[-Math.PI / 2, 0, Math.PI / 1.3]}
-                                color={'Green'}
-                            />
-
-                            <Pad
-                                position={[600, 0, 600]}
-                                // rotation={[-Math.PI / 2, 0, -Math.PI / 1.3]}
-                                color={'Yellow'}
-                            />
-
-                        </group>
-
-                        {/* Players */}
-                        <group position={[-400 + 25, 26, -400 + 25]}>
-
-                            {players?.map((server_player_obj, bug_index) => {
-
-                                var player = server_player_obj?.fourFrogs;
-
-                                if (!server_player_obj || server_player_obj.heldBy) {
-                                    // No server data on bug yet
-                                    // Bugs being held get rendered with the user carrying it
-                                    return
-                                }
-
-                                return (
-                                    <Player
-                                        position={[player.x, 0, player.y]}
-                                        key={bug_index}
-                                        player={player}
-                                        color={player.homeZone}
-                                        bugs={bugs}
-                                    />
-                                )
-
-                            })}
-
-                            {/* <Player
-                                position={[0, 0, 0]}
-                                rotation={[0, Math.PI / 4.5, 0]}
-                                color={'Red'}
-                            />
-
-                            <Player
-                                position={[10, 0, 0]}
-                                rotation={[0, -Math.PI / 4.5, 0]}
-                                color={'Blue'}
-                            />
-
-                            <Player
-                                position={[0, 0, 10]}
-                                rotation={[0, Math.PI / 1.3, 0]}
-                                color={'Green'}
-                            />
-
-                            <Player
-                                position={[10, 0, 10]}
-                                rotation={[0, -Math.PI / 1.3, 0]}
-                                color={'Yellow'}
-                            /> */}
-
-                        </group>
-
-                        {/* Bugs */}
-                        <group position={[-400 + 25, 26, -400 + 25]}>
-
-                            {bugs?.map((server_bug_obj, bug_index) => {
-
-                                if (!server_bug_obj || server_bug_obj.heldBy) {
-                                    // No server data on bug yet
-                                    // Bugs being held get rendered with the user carrying it
-                                    return
-                                }
-
-                                return (
-                                    <Bug
-                                        position={[server_bug_obj.x, 0, server_bug_obj.y]}
-                                        bug={server_bug_obj}
-                                        key={bug_index}
-                                    />
-                                )
-
-                            })}
-
-                        </group>
-
-                        {/* Powerups */}
-                        <group position={[-400 - 20, 0.5, -400 - 20]}>
-
-                            {gameState?.powerups?.active?.map(powerup_obj => {
-
-                                return (
-                                    <Powerup
-                                        key={powerup_obj.id}
-                                        powerup={powerup_obj}
-                                        position={[powerup_obj.x, 20, powerup_obj.y]}
-                                    />
-                                )
-
-                            })}
-
-                        </group>
-
-                    </group>
+                    </Suspense>
 
                     {/* <Physics gravity={[0, -30, 0]}>
 

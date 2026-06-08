@@ -3,7 +3,8 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import Bug from './Bug';
 import muddyWaterZones from '@/components/constants/muddyWaterZones';
-import { Billboard, Text } from '@react-three/drei';
+import { Billboard, Outlines, Text } from '@react-three/drei';
+import FrogCharacter from './FrogCharacter';
 
 const frogSize = 50
 
@@ -136,61 +137,74 @@ export default function Player(props) {
                     </mesh>
                 }
 
-                {/* Body */}
-                <mesh position={[0, 0, 0]}>
-                    <boxGeometry args={[bodySize, bodySize, bodySize]} />
-                    <meshStandardMaterial
-                        color={props.color}
-                    />
-                </mesh>
+                {/* TODO - Use component */}
+                <FrogCharacter
+                    color={props.color}
+                    player={player}
+                    bodySize={bodySize}
+                    bugs={bugs}
+                    position={[0, 0, 0]}
+                    tongueExtended={player.drop}
+                />
 
-                {/* Mouth */}
-                <mesh position={[0, -12.5 * spaceMultiplier, bodySize / 2]}>
-                    <boxGeometry args={[
-                        (bodySize / 1.5),
-                        (bodySize / 4),
-                        1
-                    ]} />
-                    <meshStandardMaterial
-                        color={'black'}
-                    />
-                </mesh>
-
-                {/* Tongue */}
-                <mesh position={[0, -15.5 * spaceMultiplier, bodySize / 2 + 1]}>
-                    <boxGeometry args={[
-                        (bodySize / 2),
-                        (bodySize / 6),
-                        (player.drop ? 60 : 1)
-                    ]} />
-                    <meshStandardMaterial
-                        color={'pink'}
-                    />
-                </mesh>
-
-                {/* Left Eye */}
-                <mesh position={[-10 * spaceMultiplier, 15, bodySize / 2]}>
-                    <boxGeometry args={[
-                        (bodySize / 4),
-                        (bodySize / 4),
-                        1
-                    ]} />
-                    <meshStandardMaterial
-                        color={'black'}
-                    />
-                </mesh>
-
-                {/* Right Eye */}
-                <mesh position={[10 * spaceMultiplier, 15, bodySize / 2]}>
-                    <boxGeometry args={[
-                        (bodySize / 4),
-                        (bodySize / 4),
-                        1
-                    ]} />
-                    <meshStandardMaterial
-                        color={'black'}
-                    />
-                </mesh>
+                {false && <group>
+                    {/* Body */}
+                    <mesh position={[0, 0, 0]}>
+                        <boxGeometry args={[bodySize, bodySize, bodySize]} />
+                        <meshStandardMaterial
+                            color={props.color}
+                        />
+                        <Outlines thickness={1} color="black" />
+                    </mesh>
+    
+                    {/* Mouth */}
+                    <mesh position={[0, -12.5 * spaceMultiplier, bodySize / 2]}>
+                        <boxGeometry args={[
+                            (bodySize / 1.5),
+                            (bodySize / 4),
+                            1
+                        ]} />
+                        <meshStandardMaterial
+                            color={'black'}
+                        />
+                    </mesh>
+    
+                    {/* Tongue */}
+                    <mesh position={[0, -15.5 * spaceMultiplier, bodySize / 2 + 1]}>
+                        <boxGeometry args={[
+                            (bodySize / 2),
+                            (bodySize / 6),
+                            (player.drop ? 60 : 1)
+                        ]} />
+                        <meshStandardMaterial
+                            color={'pink'}
+                        />
+                    </mesh>
+    
+                    {/* Left Eye */}
+                    <mesh position={[-10 * spaceMultiplier, 15, bodySize / 2]}>
+                        <boxGeometry args={[
+                            (bodySize / 4),
+                            (bodySize / 4),
+                            1
+                        ]} />
+                        <meshStandardMaterial
+                            color={'black'}
+                        />
+                    </mesh>
+    
+                    {/* Right Eye */}
+                    <mesh position={[10 * spaceMultiplier, 15, bodySize / 2]}>
+                        <boxGeometry args={[
+                            (bodySize / 4),
+                            (bodySize / 4),
+                            1
+                        ]} />
+                        <meshStandardMaterial
+                            color={'black'}
+                        />
+                    </mesh>
+                </group>}
 
                 {player?.holding.length == 1 &&
 

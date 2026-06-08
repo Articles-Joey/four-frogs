@@ -1,7 +1,7 @@
 {
   "name": "four-frogs",
   "description": "Four player capture the flag game. Each player gets three bugs to start, if you lose all your bugs and you are eliminated.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": false,
   "scripts": {
     "dev": "next dev --webpack -p 3018",

@@ -56,6 +56,7 @@ const RightPanelContent = (props) => {
     //     // debugTab: 'Players',
     // };
 
+    const debug = useStore((state) => state.debug);
     const debugTab = useStore((state) => state.debugTab);
     const setDebugTab = useStore((state) => state.setDebugTab);
     const devDebugPanel = useStore((state) => state.devDebugPanel);
@@ -78,6 +79,8 @@ const RightPanelContent = (props) => {
 
     // const params = useParams()
     // const room = params?.room
+
+    if (!debug && process.env.NODE_ENV !== 'development') return null;
 
     return (
         <div>
@@ -279,7 +282,7 @@ const RightPanelContent = (props) => {
 
                 </div>
 
-                <IsDev>
+                <div>
                     {devDebugPanel &&
                         <div
                             className='p-2'
@@ -313,7 +316,7 @@ const RightPanelContent = (props) => {
                             }
                         </div>
                     }
-                </IsDev>
+                </div>
 
             </div>
 
