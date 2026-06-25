@@ -11,6 +11,8 @@ import { useSocketStore } from '@/hooks/useSocketStore';
 import DarkModeHandler from "@articles-media/articles-dev-box/DarkModeHandler";
 import GlobalBody from '@articles-media/articles-dev-box/GlobalBody';
 import GlobalClientModals from '@articles-media/articles-dev-box/GlobalClientModals';
+import HotkeyHandler from '@articles-media/articles-dev-box/HotkeyHandler';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 export default function LayoutClient({ children }) {
 
@@ -21,6 +23,7 @@ export default function LayoutClient({ children }) {
                 useStore={useStore}
             />
             <Suspense>
+
                 <GlobalClientModals
                     useStore={useStore}
                     useAudioStore={useAudioStore}
@@ -72,16 +75,22 @@ export default function LayoutClient({ children }) {
                             <p>
                                 Can be customized in the settings.
                             </p>
-                            <img 
-                            src={`${process.env.NEXT_PUBLIC_CDN}games/Four Frogs/controls.png`} 
-                            style={{
-                                width: '100%',
-                                objectFit: 'contain'
-                            }} 
+                            <img
+                                src={`${process.env.NEXT_PUBLIC_CDN}games/Four Frogs/controls.png`}
+                                style={{
+                                    width: '100%',
+                                    objectFit: 'contain'
+                                }}
                             />
                         </div>
                     }}
                 />
+
+                <HotkeyHandler
+                    useStore={useStore}
+                    useHotkeys={useHotkeys}
+                />
+
             </Suspense>
         </>
     );
