@@ -1,221 +1,79 @@
+"use client";
+
 import { useState } from "react";
-
-import { Modal } from "react-bootstrap"
-
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import powerups from "@/components/constants/powerups";
+import ArticlesModal from "./ArticlesModal";
+import ArticlesSwitch from "./ArticlesSwitch";
+import ArticlesButton from "./Button";
 
-import ArticlesSwitch from "@/components/UI/ArticlesSwitch";
-import ArticlesButton from "@/components/UI/Button";
-
-export default function PrivateGameModal({
-    show,
-    setShow,
-}) {
-
-    const [showModal, setShowModal] = useState(true)
-
-    const [action, setAction] = useState('')
-
-    const [room, setRoom] = useState('')
-
-    const [powerupSettings, setPowerupSettings] = useState([...powerups.map(obj => ({
-        ...obj,
-        enabled: true
-    }))])
+export default function PrivateGameModal({ show, setShow }) {
+    const [action, setAction] = useState("");
+    const [room, setRoom] = useState("");
+    const [powerupSettings, setPowerupSettings] = useState(() => powerups.map((powerup) => ({ ...powerup, enabled: true })));
 
     return (
-        <>
-
-            <Modal
-                className="articles-modal"
-                size='md'
-                show={showModal}
-                centered
-                scrollable
-                onExited={() => {
-
-                    console.log("onExited")
-                    setShow(false)
-                    // setTimeout(() => setShow(false), 200);
-
-                }}
-                onHide={() => {
-
-                    console.log("onHide")
-                    setShowModal(false)
-
-                    // if (!lightboxData) {
-                    //     setShow(false)
-                    // } else {
-                    //     console.log("Should not close yet")
-                    // }
-
-                }}
-            >
-
-
-
-                <Modal.Header closeButton>
-                    <Modal.Title>Private Game Settings</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body className="">
-
-                    <div>
-
-                        <ArticlesButton
-                            className={`w-50 ${action == 'Join' && 'active'}`}
-                            onClick={() => {
-                                setAction("Join")
-                            }}
+        <ArticlesModal
+            title="Private Game Settings"
+            show={show}
+            setShow={setShow}
+            footerOverride={(setOpen) => (
+                <>
+                    <ArticlesButton variant="outline-dark" onClick={() => setOpen(false)}>Close</ArticlesButton>
+                    <ArticlesButton variant="success" onClick={() => {}} disabled={room.length < 3}>Join</ArticlesButton>
+                </>
+            )}
+        >
+            <Box sx={{ display: "flex" }}>
+                <ArticlesButton sx={{ width: "50%" }} active={action === "Join"} onClick={() => setAction("Join")}>
+                    Join Private Game
+                </ArticlesButton>
+                <ArticlesButton sx={{ width: "50%" }} active={action === "Start"} onClick={() => setAction("Start")}>
+                    Start Private Game
+                </ArticlesButton>
+            </Box>
+            {action && (
+                <Box sx={{ mt: "0.5rem" }}>
+                    <Divider sx={{ my: "1rem" }} />
+                    <Typography sx={{ mb: "0.5rem" }}>{action} Options</Typography>
+                    <TextField
+                        id="room-code"
+                        label="Room Code"
+                        fullWidth
+                        size="small"
+                        value={room}
+                        onChange={(event) => setRoom(event.target.value)}
+                        helperText="At least 3 characters. Only letters, numbers, underscores (_), and dashes (-) can be used"
+                    />
+                </Box>
+            )}
+            {action === "Start" && (
+                <Box sx={{ mt: "0.5rem" }}>
+                    <Typography sx={{ mb: "0.5rem" }}>Powerups</Typography>
+                    {powerupSettings.map((powerup) => (
+                        <Box
+                            key={powerup.title}
+                            sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: "0.5rem", pb: "0.5rem", borderBottom: 1, borderColor: "divider" }}
                         >
-                            Join Private Game
-                        </ArticlesButton>
-
-                        <ArticlesButton
-                            className={`w-50 ${action == 'Start' && 'active'}`}
-                            onClick={() => {
-                                setAction("Start")
-                            }}
-                        >
-                            Start Private Game
-                        </ArticlesButton>
-
-                    </div>
-
-                    {action &&
-                        <div className="mt-2">
-                            <hr />
-                            <div>
-                                {action} Options
-                            </div>
-                            <div className="form-group articles">
-                                <label htmlFor="room-code">Room Code</label>
-                                <input
-                                    id="room-code"
-                                    className="form-control"
-                                    value={room}
-                                    onChange={e => setRoom(e.target.value)}
-                                >
-
-                                </input>
-                            </div>
-                            <div className="small">At least 3 characters. Only letters, numbers, underscores (_), and dashes (-) can be used</div>
-                        </div>
-                    }
-
-                    {action == 'Start' &&
-                        <div className="mt-2">
-
-                            <div className="mb-2">
-                                Powerups
-                            </div>
-
-                            {/* <pre>
-                                {JSON.stringify(powerupSettings, null, 2)}
-                            </pre> */}
-
-                            {powerupSettings.map((powerup, i) => {
-
-                                const lookup = powerupSettings.find(obj => obj.title == powerup.title)
-
-                                return (
-                                    <div key={powerup.title} className='flex-header mb-2 pb-2 border-bottom'>
-
-                                        <div className="d-flex">
-
-                                            <div className='ratio ratio-1x1 bg-dark' style={{ position: 'relative', width: '30px', height: '30px' }}>
-
-                                            </div>
-
-                                            <div className='small ms-2 lh-sm'>
-                                                <div>{powerup.title}</div>
-                                                <div className='small'>{powerup.description}</div>
-                                            </div>
-
-                                        </div>
-
-                                        <ArticlesSwitch
-                                            checked={lookup?.enabled}
-                                            setChecked={() => {
-
-                                                let copy = [...powerupSettings]
-
-                                                if (lookup.enabled) {
-                                                    console.log("Enabled was true")
-                                                    copy = copy.map(obj => {
-
-                                                        if (obj.title == lookup.title) {
-                                                            return {
-                                                                ...obj,
-                                                                enabled: false
-                                                            }
-                                                        } else {
-                                                            return obj
-                                                        }
-
-                                                    })
-                                                    console.log(copy)
-                                                    setPowerupSettings(copy)
-                                                } else {
-                                                    console.log("Enabled was false")
-                                                    copy = copy.map(obj => {
-
-                                                        if (obj.title == lookup.title) {
-                                                            return {
-                                                                ...obj,
-                                                                enabled: true
-                                                            }
-                                                        } else {
-                                                            return obj
-                                                        }
-
-                                                    })
-                                                    console.log(copy)
-                                                    setPowerupSettings(copy)
-                                                }
-
-                                                // setPowerupSettings(copy)
-
-                                            }}
-                                        />
-
-                                    </div>
-                                )
-                            })}
-
-                        </div>
-                    }
-
-                </Modal.Body>
-
-                <Modal.Footer className="justify-content-between">
-
-                    {/* <div></div> */}
-
-                    <ArticlesButton
-                        variant="outline-dark"
-                        onClick={() => {
-                            setShowModal(false)
-                        }}
-                    >
-                        Close
-                    </ArticlesButton>
-
-                    <ArticlesButton
-                        variant="success"
-                        onClick={() => {
-
-                        }}
-                        disabled={(room.length || 0) < 3}
-                    >
-                        Join
-                    </ArticlesButton>
-
-                </Modal.Footer>
-
-            </Modal>
-        </>
-    )
-
+                            <Box sx={{ display: "flex" }}>
+                                <Box sx={{ position: "relative", width: "30px", height: "30px", aspectRatio: "1", bgcolor: "#212529", flexShrink: 0 }} />
+                                <Box sx={{ fontSize: "0.875em", ml: "0.5rem", lineHeight: 1.25 }}>
+                                    <Box>{powerup.title}</Box>
+                                    <Box sx={{ fontSize: "0.875em" }}>{powerup.description}</Box>
+                                </Box>
+                            </Box>
+                            <ArticlesSwitch
+                                slotProps={{ input: { "aria-label": powerup.title } }}
+                                checked={powerup.enabled}
+                                setChecked={(enabled) => setPowerupSettings((previous) => previous.map((item) => item.title === powerup.title ? { ...item, enabled } : item))}
+                            />
+                        </Box>
+                    ))}
+                </Box>
+            )}
+        </ArticlesModal>
+    );
 }

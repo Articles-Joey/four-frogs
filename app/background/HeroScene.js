@@ -1,3 +1,7 @@
+"use client";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Slider from "@mui/material/Slider";
 import { OrbitControls, Outlines, Sky, Text3D } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
@@ -39,9 +43,9 @@ export default function HeroScene() {
     };
 
     return (
-        <div className="background-page" style={{ position: 'relative', width: '100%', height: '100vh' }}>
+        <Box className="background-page" sx={{ position: 'relative', width: '100%', height: '100vh' }}>
 
-            <div style={{
+            <Box sx={{
                 position: 'absolute',
                 top: '20px',
                 left: '20px',
@@ -50,9 +54,9 @@ export default function HeroScene() {
                 flexDirection: 'column',
                 gap: '10px'
             }}>
-                <button
+                <Button
                     onClick={handleCapture}
-                    style={{
+                    sx={{
                         padding: '8px 16px',
                         background: 'rgba(0, 0, 0, 0.8)',
                         color: '#fff',
@@ -63,16 +67,14 @@ export default function HeroScene() {
                     }}
                 >
                     📷 Capture Transparent PNG
-                </button>
+                </Button>
 
-                <div className="d-flex">
+                <Box sx={{ display: "flex" }}>
 
-                    <Link href="/">
-                        <button
-                            onClick={() => {
-
-                            }}
-                            style={{
+                        <Button
+                            component={Link}
+                            href="/"
+                            sx={{
                                 padding: '8px 16px',
                                 background: 'rgba(0, 0, 0, 0.8)',
                                 color: '#fff',
@@ -83,14 +85,13 @@ export default function HeroScene() {
                             }}
                         >
                             🏠
-                        </button>
-                    </Link>
+                        </Button>
 
-                    <button
+                    <Button
                         onClick={() => {
                             toggleDarkMode();
                         }}
-                        style={{
+                        sx={{
                             padding: '8px 16px',
                             background: 'rgba(0, 0, 0, 0.8)',
                             color: '#fff',
@@ -101,11 +102,11 @@ export default function HeroScene() {
                         }}
                     >
                         {darkMode ? '🌞 Light Mode' : '🌙 Dark Mode'}
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
                         onClick={() => setDebug(!debug)}
-                        style={{
+                        sx={{
                             padding: '8px 16px',
                             background: debug ? 'rgba(255, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.8)',
                             color: '#fff',
@@ -116,10 +117,10 @@ export default function HeroScene() {
                         }}
                     >
                         {debug ? '🚫 Debug: ON' : '🛠️ Debug: OFF'}
-                    </button>
-                </div>
+                    </Button>
+                </Box>
 
-                <div style={{
+                <Box sx={{
                     background: 'rgba(0, 0, 0, 0.8)',
                     padding: '10px',
                     borderRadius: '4px',
@@ -127,17 +128,17 @@ export default function HeroScene() {
                     fontSize: '12px'
                 }}>
                     <strong>LookAt Target (Y)</strong><br />
-                    <input
-                        type="range"
-                        min="-5"
-                        max="10"
-                        step="0.1"
+                    <Slider
+                        aria-label="LookAt Target (Y)"
+                        min={-5}
+                        max={10}
+                        step={0.1}
                         value={target[1]}
-                        onChange={(e) => setTarget([0, parseFloat(e.target.value), 0])}
-                        style={{ width: '100%' }}
+                        onChange={(_, value) => setTarget([0, value, 0])}
+                        sx={{ width: '100%' }}
                     />
-                </div>
-            </div>
+                </Box>
+            </Box>
 
             <Canvas
                 gl={{
@@ -277,7 +278,7 @@ export default function HeroScene() {
                 /> */}
 
             </Canvas>
-        </div>
+        </Box>
     )
 
 }

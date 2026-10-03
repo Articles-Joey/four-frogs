@@ -1,4 +1,7 @@
-"use client"
+"use client";
+import Box from "@mui/material/Box";
+import MenuIcon from "@mui/icons-material/Menu";
+import { panelSx } from "@/components/UI/panelStyles";
 import { useEffect, useContext, useState, useRef } from 'react';
 
 import NextImage from 'next/image'
@@ -101,7 +104,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import muddyWaterZones from '@/components/constants/muddyWaterZones';
 import LeftPanelContent from '@/components/UI/LeftPanel';
 import RightPanelContent from '@/components/UI/RightPanel';
-import TouchControls from '@/components/UI/TouchControls';
+const TouchControls = dynamic(() => import("@/components/UI/TouchControls"), { ssr: false });
 import { useSocketStore } from '@/hooks/useSocketStore';
 import { useStore } from '@/hooks/useStore';
 import { useGameStore } from '@/hooks/useGameStore';
@@ -1204,231 +1207,138 @@ export default function FourFrogs() {
     }
 
     return (
-
-        <div className={`four-frogs-game-page ${isFullscreen && 'fullscreen'}`} id='four-frogs-game-page'>
-
-            {showGameOverModal &&
+        <Box
+            id="four-frogs-game-page"
+            sx={{ position: "relative", flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}
+        >
+            {showGameOverModal && (
                 <ArticlesModal
                     show={showGameOverModal}
                     setShow={setShowGameOverModal}
                     title="Game Over"
-                    disableClose={true}
-                    action={() => {
-                        router.push('')
-                    }}
-                    actionText={'Exit Game'}
+                    disableClose
+                    action={() => router.push('')}
+                    actionText="Exit Game"
                 >
-
-                    {/* {[...gameState.insectTrack]
-                        .sort((a, b) => b.length - a.length)
-                        .map((track, index) => {
-
-                            return (
-                                <div key={index}>
-                                    <div>Player {index + 1}</div>
-                                    {JSON.stringify(track)}
-                                </div>
-                            )
-
-                        })} */}
-
-                    {
-                        [...scoreboard.list]
-                            .sort((a, b) => b.bugs.length - a.bugs.length)
-                            .map((item, i) =>
-                                <div key={i} className={`${(i + 1) < scoreboard.list.length && 'mb-4'}`}>
-
-                                    <div>
-                                        <div className="small">
-                                            {ordinal_suffix_of(i + 1)} Place | <span style={{ textTransform: 'capitalize' }}>{item?.fourFrogs?.homeZone}</span> Frog
-                                        </div>
-                                    </div>
-
-                                    <div style={{ fontSize: '1.5rem' }}>
-                                        {item?.fourFrogs?.nickname || item?.fourFrogs?.homeZone || "?"} - {item.bugs.length} Bugs - {item?.fourFrogs?.health || 0} Health
-                                    </div>
-
-                                </div>
-                            )}
-
-
-                    {/* <hr /> */}
-
-                    {/* <div className='d-flex justify-content-center text-center'>
-                        <a href='https://articles.media' target="_blank" rel="noreferrer" className='w-100'>
-                            <NextImage
-                                priority
-                                width={60}
-                                height={60}
-                                src={`${ process.env.NEXT_PUBLIC_CDN }profile_photos / starter / articles.jpg`}
-                                alt="Articles Media Logo"
-                                className='mb-2'
-                            />
-                            <div>
-                                Visit Articles Media
-                            </div>
-                        </a>
-
-                    </div> */}
-
+                    {[...scoreboard.list]
+                        .sort((a, b) => b.bugs.length - a.bugs.length)
+                        .map((item, i) => (
+                            <Box key={i} sx={{ mb: i + 1 < scoreboard.list.length ? "1.5rem" : 0 }}>
+                                <Box sx={{ fontSize: "0.875em" }}>
+                                    {ordinal_suffix_of(i + 1)} Place | <Box component="span" sx={{ textTransform: "capitalize" }}>{item?.fourFrogs?.homeZone}</Box> Frog
+                                </Box>
+                                <Box sx={{ fontSize: "1.5rem" }}>
+                                    {item?.fourFrogs?.nickname || item?.fourFrogs?.homeZone || "?"} - {item.bugs.length} Bugs - {item?.fourFrogs?.health || 0} Health
+                                </Box>
+                            </Box>
+                        ))}
                 </ArticlesModal>
-            }
+            )}
 
-            {/* {showInfoModal &&
-                <InfoModal
-                    show={showInfoModal}
-                    setShow={setShowInfoModal}
-                />
-            }
-
-            {showSettingsModal &&
-                <SettingsModal
-                    show={showSettingsModal}
-                    setShow={setShowSettingsModal}
-                />
-            }
-
-            {showInviteModal &&
-                <InviteModal
-                    show={showInviteModal}
-                    setShow={setShowInviteModal}
-                />
-            } */}
-
-            <div className="background">
+            <Box sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", filter: "blur(4px)" }}>
                 <NextImage
-                    src={`${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/background.jpg`}
+                    src={process.env.NEXT_PUBLIC_CDN + "games/Four%20Frogs/background.jpg"}
                     alt=""
                     fill
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: "cover" }}
                 />
-            </div>
+            </Box>
 
-            <div className="mobile-menu-wrap">
-
-                <div className="menu-bar card card-articles p-1 justify-content-center">
-                    <div>
-                        <ArticlesButton
-                            small
-                            active={showMenu}
-                            onClick={() => {
-                                setShowMenu(prev => !prev)
-                            }}
-                        >
-                            <i className="fad fa-bars"></i>
-                            <span>Menu</span>
-                        </ArticlesButton>
-                    </div>
-                </div>
-
-                <div
-                    className={`mobile-menu panel ${showMenu && 'show'}`}
-                >
-
-                    <div
-                        className="menu-background"
-                        style={{
-                            backgroundImage: `url(${`${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/bark.jpg`})`,
-                            opacity: 0.5
-                        }}
-                    ></div>
-
-                    <LeftPanelContent
-                    // {...panelProps}
-                    />
-
-                </div>
-
-            </div>
-
-            <TouchControls
-            // touchControlsEnabled={touchControlsEnabled}
-            />
-
-            <div className='mobile-players-info card'>
-                <RightPanelContent
-                    {...{
-                        // gameState,
-                        // players,
-                        // bugs,
-                        // debugTab,
-                        // setDebugTab,
-                        // devDebugPanel,
-                        // setDevDebugPanel
+            <Box sx={{ "@media (min-width: 992px)": { display: "none" } }}>
+                <Box
+                    sx={{
+                        position: "fixed", bottom: 0, left: 0, width: "100%", height: "50px", zIndex: 3,
+                        p: "0.25rem", display: "flex", justifyContent: "center", flexDirection: "column",
+                        bgcolor: "background.paper", color: "text.primary", border: 1, borderColor: "divider",
                     }}
-                />
-            </div>
+                >
+                    <Box>
+                        <ArticlesButton small active={showMenu} onClick={() => setShowMenu((previous) => !previous)}>
+                            <MenuIcon sx={{ fontSize: "1em", mr: "0.2rem" }} />
+                            <Box component="span">Menu</Box>
+                        </ArticlesButton>
+                    </Box>
+                </Box>
+                <Box
+                    sx={{
+                        ...panelSx,
+                        position: "fixed",
+                        bottom: "50px",
+                        left: 0,
+                        width: "100%",
+                        height: "auto",
+                        top: isFullscreen ? 0 : "50px",
+                        zIndex: 2,
+                        bgcolor: "rgba(0,0,0,0.75)",
+                        transform: showMenu ? "translateY(0)" : "translateY(calc(100% + 50px))",
+                        transitionDuration: "200ms",
+                        p: "1rem",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: -1,
+                            backgroundImage: "url(" + process.env.NEXT_PUBLIC_CDN + "games/Four%20Frogs/bark.jpg)",
+                            opacity: 0.5,
+                        }}
+                    />
+                    <LeftPanelContent />
+                </Box>
+            </Box>
 
-            <div className='game-panel'>
-                <div className='canvas-container'>
+            <TouchControls />
 
-                    {renderMode == '3D' &&
-                        <div className={`${renderMode == '3D' && 'd-none'}`}>
-                            <canvas id="static-canvas"></canvas>
-                            <canvas id="canvas"></canvas>
-                        </div>
-                    }
-
-                    {/* <div className={`${renderMode == '2D' && 'd-none'}`}> */}
-                    {renderMode == '3D' &&
-                        <GameCanvas
-                        // bugs={bugs}
-                        // players={players}
-                        // gameState={gameState}
-                        // cameraShakeEnabled={cameraShakeEnabled}
-                        />
-                    }
-                    {/* </div> */}
-
-                </div>
-            </div>
-
-            {/* Left Panel */}
-            <div
-                className="panel panel-left d-none d-lg-flex"
-                style={{
-                    background: `url(${`${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/bark.jpg`})`
+            <Box
+                sx={{
+                    position: "absolute", top: 0, mt: "0.5rem", width: "95%", p: "0.5rem",
+                    bgcolor: "background.paper", color: "text.primary", border: 1, borderColor: "divider", borderRadius: "0.375rem",
+                    "@media (min-width: 992px)": { display: "none" },
                 }}
             >
+                <RightPanelContent mobile />
+            </Box>
 
-                <LeftPanelContent
-                // {...panelProps}
-                />
-
-            </div>
-
-            {/* Right Panel */}
-            <div
-                className="panel panel-right d-none d-lg-flex"
-                style={{ background: `url(${`${process.env.NEXT_PUBLIC_CDN}games/Four%20Frogs/bark.jpg`})` }}
+            <Box
+                sx={{
+                    width: "100%", display: "flex", alignItems: "center", justifyContent: "center", height: "calc(100vh - 50px)",
+                    "@media (min-width: 992px)": { height: "100vh", ml: "300px", mr: "300px" },
+                }}
             >
+                <Box
+                    sx={{
+                        m: "0 auto", display: "block", zIndex: 1, border: "5px solid rgb(129,77,35)",
+                        bgcolor: "rgba(255,255,255,0.35)", width: "100%", height: "100%", position: "relative",
+                        "& canvas": { position: "absolute", left: 0, top: 0, width: "100%", height: "100%" },
+                    }}
+                >
+                    {renderMode === '3D' && (
+                        <Box sx={{ display: "none" }}>
+                            <canvas id="static-canvas" />
+                            <canvas id="canvas" />
+                        </Box>
+                    )}
+                    {renderMode === '3D' && <GameCanvas />}
+                </Box>
+            </Box>
 
-                <RightPanelContent
-                // {...{
-                //     gameState,
-                //     players,
-                //     bugs,
-                //     debugTab,
-                //     setDebugTab,
-                //     devDebugPanel,
-                //     setDevDebugPanel
-                // }}
-                />
-
-            </div >
-
-            {/* <div className="container">
-
-                <div className="card card-articles mx-auto" style={{ "width": "max-content" }}>
-
-                    <div className="card-body">
-                        
-                    </div>
-
-                </div>
-
-            </div> */}
-
-        </div >
+            <Box
+                sx={{
+                    ...panelSx, width: "300px", left: 0, display: "none",
+                    backgroundImage: "url(" + process.env.NEXT_PUBLIC_CDN + "games/Four%20Frogs/bark.jpg)",
+                    "@media (min-width: 992px)": { display: "flex" },
+                }}
+            >
+                <LeftPanelContent />
+            </Box>
+            <Box
+                sx={{
+                    ...panelSx, width: "300px", right: 0, display: "none",
+                    backgroundImage: "url(" + process.env.NEXT_PUBLIC_CDN + "games/Four%20Frogs/bark.jpg)",
+                    "@media (min-width: 992px)": { display: "flex" },
+                }}
+            >
+                <RightPanelContent />
+            </Box>
+        </Box>
     );
 }

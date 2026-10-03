@@ -1,10 +1,13 @@
+"use client";
+import Box from "@mui/material/Box";
+import { panelContentSx } from "@/components/UI/panelStyles";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import CloseIcon from "@mui/icons-material/Close";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import ArticlesButton from "@/components/UI/Button";
-import ArticlesDate from "@/components/UI/ArticlesDate";
 // import SingleInput from "@/components/Articles/SingleInput";
-import IsDev from "@/components/UI/IsDev";
 import Link from "next/link";
 // import { useLocalStorageNew } from "@/hooks/useLocalStorageNew";
-import ControllerPreview from "@/components/UI/ControllerPreview";
 
 // import ROUTES from 'components/constants/routes';
 
@@ -145,21 +148,19 @@ const LeftPanelContent = () => {
     });
 
     return (
-        <div className="text-dark">
+        <Box sx={{ color: "#212529" }}>
 
             <GameStatus />
 
-            <div className='buttons-wrap mb-2'>
+            <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "5px", mb: "0.5rem" }}>
 
-                <Link href={'/'}>
-                    <div className='btn btn-four-frogs-primary w-100'>
-                        <div>Leave Game</div>
-                    </div>
-                </Link>
+                <ArticlesButton component={Link} href="/" variant="four-frogs-primary" sx={{ width: "100%" }}>
+                    Leave Game
+                </ArticlesButton>
 
                 <ArticlesButton
                     small
-                    className=""
+                    
                     variant='four-frogs-primary'
                     active={isFullscreen}
                     onClick={() => {
@@ -170,34 +171,34 @@ const LeftPanelContent = () => {
                         }
                     }}
                 >
-                    {isFullscreen && <span>Exit </span>}
-                    {!isFullscreen && <span><i className='fad fa-expand'></i></span>}
-                    <span>Fullscreen</span>
+                    {isFullscreen && <Box component="span">Exit </Box>}
+                    {!isFullscreen && <Box component="span"><FullscreenIcon  sx={{ fontSize: "1em", mr: "0.2rem", verticalAlign: "middle" }} /></Box>}
+                    <Box component="span">Fullscreen</Box>
                 </ArticlesButton>
 
-                <div
-                    className='btn btn-four-frogs-primary'
+                <ArticlesButton
+                    variant="four-frogs-primary"
                     onClick={() => {
                         setShowInfoModal({
                             game: 'Four Frogs'
                         })
                     }}
                 >
-                    <div>Info</div>
-                </div>
+                    <Box>Info</Box>
+                </ArticlesButton>
 
-                <div
-                    className='btn btn-four-frogs-primary'
+                <ArticlesButton
+                    variant="four-frogs-primary"
                     onClick={() => {
                         setShowSettingsModal(true)
                     }}
                 >
-                    <div>Settings</div>
-                </div>
+                    <Box>Settings</Box>
+                </ArticlesButton>
 
                 <ArticlesButton
                     active={showInviteModal}
-                    className='btn btn-four-frogs-primary'
+                    variant="four-frogs-primary"
                     onClick={() => {
                         // setShowInviteModal(true)
                         setShowInviteModal({
@@ -207,265 +208,172 @@ const LeftPanelContent = () => {
                         })
                     }}
                 >
-                    <div>Invite</div>
+                    <Box>Invite</Box>
                 </ArticlesButton>
 
                 <ArticlesButton
                     small
-                    className=""
+                    
                     variant='four-frogs-primary'
                     active={showChat}
                     onClick={() => {
                         setShowChat(prev => !prev)
                     }}
                 >
-                    <span>Chat</span>
-                    <span className="badge bg-dark ms-1">
+                    <Box component="span">Chat</Box>
+                    <Box component="span" sx={{ display: "inline-block", px: "0.65em", py: "0.35em", fontSize: "0.75em", fontWeight: 700, lineHeight: 1, textAlign: "center", whiteSpace: "nowrap", verticalAlign: "baseline", borderRadius: "0.375rem", bgcolor: "#212529", color: "#fff", ml: "0.25rem" }}>
                         {chatMessages.length || 0}
-                    </span>
+                    </Box>
                 </ArticlesButton>
 
-            </div>
+            </Box>
 
             {showChat &&
-                <div className="panel-content-group text-dark p-0">
+                <Box sx={{ ...panelContentSx, color: "#212529", p: "0" }}>
 
-                    <div className='small p-1 d-flex justify-content-between align-items-center border-bottom border-dark'>
+                    <Box sx={{ fontSize: "0.875em", p: "0.25rem", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid", borderColor: "#212529" }}>
 
-                        <div className="fw-bold">
+                        <Box sx={{ fontWeight: 700 }}>
                             Game Chat
-                        </div>
+                        </Box>
 
                         <ArticlesButton
                             small
-                            className=""
+                            
                             variant='four-frogs-primary'
                             active={showChat}
                             onClick={() => {
                                 setShowChat(false)
                             }}
                         >
-                            <i className="fad fa-times me-0"></i>
+                            <CloseIcon  sx={{ fontSize: "1em", mr: "0", verticalAlign: "middle" }} />
                         </ArticlesButton>
 
-                    </div>
+                    </Box>
 
-                    <div className='p-2'>
+                    <Box sx={{ p: "0.5rem" }}>
 
-                        {/* {!onlineInteractionsWarning &&
-                            <div>
-                                <div className='small mb-2'>
-                                    {`Online interactions are not rated! There is no way for Articles Media to predict what you'll hear and see online. If you wish to use the chat please accept.`}
-                                </div>
-                                <ArticlesButton
-                                    small
-                                    className="w-100"
-                                    variant='four-frogs-primary'
-                                    active={showChat}
-                                    onClick={() => {
-                                        setOnlineInteractionsWarning(true)
-                                    }}
-                                >
-                                    <span>Accept Warning</span>
-                                </ArticlesButton>
-                            </div>
-                        } */}
+                        
 
-                        {/* {onlineInteractionsWarning &&
-                            <div>
+                        
 
-                                <div ref={chatMessagesRef} className='mb-1' style={{ maxHeight: '200px', overflow: 'auto' }}>
-                                    {chatMessages.map((chat, chat_i) => {
-                                        return (
-                                            <div key={chat_i}>
-
-                                                <div className='small text-secondary'>
-                                                    <ArticlesDate date={chat?.date} />
-                                                </div>
-
-                                                <div>{chat?.nickname || "?"}({chat?.color}) - {chat?.message}</div>
-
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-
-                                <div className='d-flex'>
-                                    <div className='flex-grow-1'>
-                                        <input
-                                            id="room-code"
-                                            className="form-control"
-                                            value={chatMessage}
-                                            onChange={e => setChatMessage(e.target.value)}
-                                        ></input>
-                                    </div>
-                                    <ArticlesButton
-                                        small
-                                        className=""
-                                        variant='articles'
-                                        active={false}
-                                        onClick={() => {
-
-                                            console.log(socket)
-
-                                            let data = {
-                                                message: chatMessage,
-                                                date: new Date(),
-                                                color: players?.find(player => player.id == socket?.id)?.fourFrogs?.homeZone,
-                                                socket_id: socket?.id
-                                            }
-
-                                            socket.emit('four-frogs-player-chat', {
-                                                server_id,
-                                                data
-                                            });
-
-                                            setChatMessages(prev => ([
-                                                ...prev,
-                                                data
-                                            ]))
-
-                                            setChatMessage('')
-
-                                            setInterval(
-                                                scrollToBottomOfChatMessages,
-                                                1000
-                                            );
-
-                                        }}
-                                    >
-                                        <i className="fad fa-paper-plane me-0"></i>
-                                    </ArticlesButton>
-                                </div>
-
-                            </div>
-                        } */}
-
-                    </div>
-                </div>
+                    </Box>
+                </Box>
             }
 
-            <div className='mb-2'>
+            <Box sx={{ mb: "0.5rem" }}>
 
-                <div className="badge bg-dark mb-1">
+                <Box sx={{ display: "inline-block", px: "0.65em", py: "0.35em", fontSize: "0.75em", fontWeight: 700, lineHeight: 1, textAlign: "center", whiteSpace: "nowrap", verticalAlign: "baseline", borderRadius: "0.375rem", bgcolor: "#212529", color: "#fff", mb: "0.25rem" }}>
                     Touch Controls
-                </div>
+                </Box>
 
-                <div>
+                <Box>
                     <ArticlesButton
                         variant='four-frogs-primary'
-                        className="w-50"
+                        sx={{ width: "50%", opacity: touchControlsEnabled ? 0.5 : 1 }}
                         active={!touchControlsEnabled}
                         onClick={() => {
                             setTouchControlsEnabled(false)
                         }}
-                        style={{
-                            opacity: touchControlsEnabled ? 0.5 : 1,
-                        }}
+                        
                     >
-                        <i className="fad fa-redo"></i>
+                        <RestartAltIcon  sx={{ fontSize: "1em", mr: "0.2rem", verticalAlign: "middle" }} />
                         Off
                     </ArticlesButton>
 
                     <ArticlesButton
                         variant='four-frogs-primary'
-                        className="w-50"
+                        sx={{ width: "50%", opacity: !touchControlsEnabled ? 0.5 : 1 }}
                         active={touchControlsEnabled}
                         onClick={() => {
                             setTouchControlsEnabled(true)
                         }}
-                        style={{
-                            opacity: !touchControlsEnabled ? 0.5 : 1,
-                        }}
+                        
                     >
-                        <i className="fad fa-redo"></i>
+                        <RestartAltIcon  sx={{ fontSize: "1em", mr: "0.2rem", verticalAlign: "middle" }} />
                         On
                     </ArticlesButton>
-                </div>
+                </Box>
 
-            </div>
+            </Box>
 
-            <div>
-                <div className="badge bg-dark mb-1">
+            <Box>
+                <Box sx={{ display: "inline-block", px: "0.65em", py: "0.35em", fontSize: "0.75em", fontWeight: 700, lineHeight: 1, textAlign: "center", whiteSpace: "nowrap", verticalAlign: "baseline", borderRadius: "0.375rem", bgcolor: "#212529", color: "#fff", mb: "0.25rem" }}>
                     Render Mode
-                </div>
-                <div className="d-flex mb-1">
+                </Box>
+                <Box sx={{ display: "flex", mb: "0.25rem" }}>
                     <ArticlesButton
                         variant='four-frogs-primary'
-                        className="w-50"
+                        sx={{ width: "50%", opacity: renderMode !== '2D' ? 0.5 : 1 }}
                         // disabled={renderMode !== '2D'}
                         active={renderMode === '2D'}
-                        style={{
-                            opacity: renderMode !== '2D' ? 0.5 : 1,
-                        }}
+                        
                         onClick={() => {
                             setRenderMode("2D")
                         }}
                     >
                         2D
-                        <span className="badge bg-dark ms-1">v</span>
+                        <Box component="span" sx={{ display: "inline-block", px: "0.65em", py: "0.35em", fontSize: "0.75em", fontWeight: 700, lineHeight: 1, textAlign: "center", whiteSpace: "nowrap", verticalAlign: "baseline", borderRadius: "0.375rem", bgcolor: "#212529", color: "#fff", ml: "0.25rem" }}>v</Box>
                     </ArticlesButton>
                     <ArticlesButton
                         variant='four-frogs-primary'
-                        className="w-50"
+                        sx={{ width: "50%", opacity: renderMode !== '3D' ? 0.5 : 1 }}
                         // disabled={renderMode !== '3D'}
                         active={renderMode === '3D'}
-                        style={{
-                            opacity: renderMode !== '3D' ? 0.5 : 1,
-                        }}
+                        
                         onClick={() => {
                             setRenderMode("3D")
                         }}
                     >
                         3D
-                        <span className="badge bg-dark ms-1">v</span>
+                        <Box component="span" sx={{ display: "inline-block", px: "0.65em", py: "0.35em", fontSize: "0.75em", fontWeight: 700, lineHeight: 1, textAlign: "center", whiteSpace: "nowrap", verticalAlign: "baseline", borderRadius: "0.375rem", bgcolor: "#212529", color: "#fff", ml: "0.25rem" }}>v</Box>
                     </ArticlesButton>
-                </div>
-            </div>
+                </Box>
+            </Box>
 
-            {/* <IsDev> */}
+            
 
             {renderMode == '3D' &&
-                <div className='mb-2'>
+                <Box sx={{ mb: "0.5rem" }}>
                     <ArticlesButton
                         variant='four-frogs-primary'
-                        className="w-50"
+                        sx={{ width: "50%" }}
                         onClick={() => {
                             setCameraShakeEnabled(!cameraShakeEnabled)
                         }}
                     >
-                        <span style={{ fontSize: '0.7rem' }}>Camera Shake</span>
-                        <span className="badge bg-dark ms-1">{cameraShakeEnabled ? 'On' : 'Off'}</span>
+                        <Box component="span" sx={{ fontSize: '0.7rem' }}>Camera Shake</Box>
+                        <Box component="span" sx={{ display: "inline-block", px: "0.65em", py: "0.35em", fontSize: "0.75em", fontWeight: 700, lineHeight: 1, textAlign: "center", whiteSpace: "nowrap", verticalAlign: "baseline", borderRadius: "0.375rem", bgcolor: "#212529", color: "#fff", ml: "0.25rem" }}>{cameraShakeEnabled ? 'On' : 'Off'}</Box>
                     </ArticlesButton>
                     <ArticlesButton
                         variant='four-frogs-primary'
-                        className="w-50"
+                        sx={{ width: "50%" }}
                         // disabled={true}
                         onClick={() => {
                             setCameraLocked(!cameraLocked)
                         }}
                     >
-                        <span style={{ fontSize: '0.76rem' }}>Camera Lock</span>
-                        <span className="badge bg-dark ms-1">{cameraLocked ? 'On' : 'Off'}</span>
+                        <Box component="span" sx={{ fontSize: '0.76rem' }}>Camera Lock</Box>
+                        <Box component="span" sx={{ display: "inline-block", px: "0.65em", py: "0.35em", fontSize: "0.75em", fontWeight: 700, lineHeight: 1, textAlign: "center", whiteSpace: "nowrap", verticalAlign: "baseline", borderRadius: "0.375rem", bgcolor: "#212529", color: "#fff", ml: "0.25rem" }}>{cameraLocked ? 'On' : 'Off'}</Box>
                     </ArticlesButton>
-                </div>
+                </Box>
             }
 
-            {/* </IsDev> */}
+            
 
             {controllerState?.connected &&
-                <div className="panel-content-group p-0 text-dark">
+                <Box sx={{ ...panelContentSx, p: "0", color: "#212529" }}>
 
-                    <div className="p-1 border-bottom border-dark">
-                        <div className="fw-bold" style={{ fontSize: '0.7rem' }}>
+                    <Box sx={{ p: "0.25rem", borderBottom: "1px solid", borderColor: "#212529" }}>
+                        <Box sx={{ fontWeight: 700, fontSize: "0.7rem" }}>
                             {controllerState?.id}
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
 
-                    <div className='p-1'>
+                    <Box sx={{ p: "0.25rem" }}>
                         <ArticlesButton
                             small
-                            className="w-100"
+                            sx={{ width: "100%" }}
                             active={showControllerState}
                             onClick={() => {
                                 setShowControllerState(prev => !prev)
@@ -473,40 +381,17 @@ const LeftPanelContent = () => {
                         >
                             {showControllerState ? 'Hide' : 'Show'} Controller Preview
                         </ArticlesButton>
-                    </div>
+                    </Box>
 
-                    {/* {showControllerState && <div className='p-3'>
+                    
 
-                        <ControllerPreview
-                            controllerState={controllerState}
-                            showJSON={true}
-                            showVibrationControls={true}
-                            maxHeight={300}
-                            showPreview={true}
-                        />
-                    </div>} */}
-
-                </div>
+                </Box>
             }
 
-            {/* TODO - One day, lets get the game finished first */}
-            {/* <div className="panel-content-group card rounded-0 p-0">
+            
+            
 
-                    <div className="card-header border-bottom border-dark d-flex justify-content-between align-items-center">
-                        <h5 className='mb-0'>Spectators</h5>
-                        <h5 className='mb-0'>0</h5>
-                    </div>
-
-                    <div
-                        style={{ minHeight: '250px' }}
-                        className='p-3'
-                    >
-                        {`< SpectatorsGameBoard > `}
-                    </div>
-
-                </div> */}
-
-        </div>
+        </Box>
     )
 }
 

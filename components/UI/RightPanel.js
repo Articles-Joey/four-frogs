@@ -1,13 +1,21 @@
+"use client";
+import Box from "@mui/material/Box";
+import { panelContentSx } from "@/components/UI/panelStyles";
+import CloseIcon from "@mui/icons-material/Close";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import BugReportIcon from "@mui/icons-material/BugReport";
+import BugReportOutlinedIcon from "@mui/icons-material/BugReportOutlined";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import ArticlesButton from "@/components/UI/Button";
-import IsDev from "@/components/UI/IsDev";
 
 // import ROUTES from 'components/constants/routes';
 import ViewUserModal from "@/components/UI/ViewUserModal";
 import { useSocketStore } from "@/hooks/useSocketStore";
-import dynamic from "next/dynamic";
-import { memo, useState } from "react";
+import { memo } from "react";
 // import { useSelector } from "react-redux";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 // import powerups from "../powerups";
 import { useStore } from "@/hooks/useStore";
 import { useGameStore } from "@/hooks/useGameStore";
@@ -17,7 +25,7 @@ import { useGameStore } from "@/hooks/useGameStore";
 //     { ssr: false }
 // )
 
-const RightPanelContent = (props) => {
+const RightPanelContent = ({ mobile = false }) => {
 
     const searchParams = useSearchParams()
     const searchParamsObject = Object.fromEntries(searchParams.entries());
@@ -83,16 +91,11 @@ const RightPanelContent = (props) => {
     if (!debug && process.env.NODE_ENV !== 'development') return null;
 
     return (
-        <div>
+        <Box>
 
-            {/* {showInviteModal &&
-                <InviteModal
-                    show={showInviteModal}
-                    setShow={setShowInviteModal}
-                />
-            } */}
+            
 
-            <div className="players-info-wrap">
+            <Box sx={mobile ? { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "5px", fontSize: "0.75rem" } : {}}>
                 {[
                     {
                         player_key: 'Red',
@@ -117,30 +120,30 @@ const RightPanelContent = (props) => {
                     if (gameState?.insectTrack?.length > 0) numberOfBugIcons = gameState?.insectTrack[player_index].length;
 
                     return (
-                        <div
+                        <Box
                             key={item.player_key}
-                            className="panel-content-group mb-0"
+                            sx={{ ...panelContentSx, mb: "0" }}
                         >
 
-                            <h5
-                                className="mb-0 me-2"
+                            <Box component="h5"
+                                sx={{ mt: 0, mb: 0, mr: "0.5rem", fontSize: "1.25rem", fontWeight: 500, lineHeight: 1.2 }}
                                 onClick={() => {
                                     console.log(player_lookup)
                                 }}
                             >
                                 {item.player_key}
-                            </h5>
+                            </Box>
 
                             {player_lookup ?
-                                <div className='mb-1 d-flex flex-column'>
+                                <Box sx={{ mb: "0.25rem", display: "flex", flexDirection: "column" }}>
 
-                                    <div className="d-flex align-items-center">
-                                        <span className="border rounded-1">
+                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                        <Box component="span" sx={{ border: "1px solid #000", borderRadius: "0.25rem" }}>
                                             <ViewUserModal
                                                 user_id={player_lookup.user_id}
                                                 dangerousPopulate={true}
                                             />
-                                        </span>
+                                        </Box>
                                         <ArticlesButton
                                             small
                                             onClick={() => {
@@ -149,12 +152,12 @@ const RightPanelContent = (props) => {
                                             variant='danger'
                                             disabled={userReduxState?._id == player_lookup.user_id}
                                         >
-                                            <i className="fad fa-times me-0"></i>
+                                            <CloseIcon  sx={{ fontSize: "1em", mr: "0", verticalAlign: "middle" }} />
                                         </ArticlesButton>
-                                    </div>
-                                </div>
+                                    </Box>
+                                </Box>
                                 :
-                                <div>
+                                <Box>
                                     <ArticlesButton
                                         small
                                         onClick={() => {
@@ -178,14 +181,14 @@ const RightPanelContent = (props) => {
                                     >
                                         Add Bot
                                     </ArticlesButton>
-                                </div>
+                                </Box>
                             }
 
-                            <div>
+                            <Box>
 
                                 {numberOfIcons > 0 && [...Array(numberOfIcons)].map((bug_type, i) => {
                                     return (
-                                        <i key={i} className="fas fa-heart heart-icon enabled"></i>
+                                        <FavoriteIcon key={i}  sx={{ fontSize: "1em", mr: "0.2rem", verticalAlign: "middle", color: "red" }} />
                                     )
                                 })
                                 }
@@ -198,23 +201,19 @@ const RightPanelContent = (props) => {
                                     )
                                 ].map((bug_type, i) => {
                                     return (
-                                        <i key={i} className="fal fa-heart"></i>
+                                        <FavoriteBorderIcon key={i}  sx={{ fontSize: "1em", mr: "0.2rem", verticalAlign: "middle" }} />
                                     )
                                 })}
 
-                                {/* <i className="fas fa-heart heart-icon enabled"></i>
-                            <i className="fas fa-heart heart-icon enabled"></i>
-                            <i className="fal fa-heart"></i>
-                            <i className="fal fa-heart"></i>
-                            <i className="fal fa-heart"></i> */}
+                                
 
-                            </div>
+                            </Box>
 
-                            <div>
+                            <Box>
 
                                 {gameState?.insectTrack?.length > 0 && gameState.insectTrack[player_index].map((bug_type, i) => {
                                     return (
-                                        <i key={i} className="fas fa-bug bug-icon enabled"></i>
+                                        <BugReportIcon key={i}  sx={{ fontSize: "1em", mr: "0.2rem", verticalAlign: "middle", color: "green" }} />
                                     )
                                 })}
 
@@ -226,34 +225,30 @@ const RightPanelContent = (props) => {
                                     )
                                 ].map((bug_type, i) => {
                                     return (
-                                        <i key={i} className="fal fa-bug"></i>
+                                        <BugReportOutlinedIcon key={i}  sx={{ fontSize: "1em", mr: "0.2rem", verticalAlign: "middle" }} />
                                     )
                                 })}
 
-                                {/* <i className="fas fa-bug bug-icon enabled"></i>
-                            <i className="fas fa-bug bug-icon enabled"></i>
-                            <i className="fas fa-bug bug-icon enabled"></i> */}
-                                {/* <i className="fal fa-bug"></i>
-                            <i className="fal fa-bug"></i> */}
-                            </div>
+                                
+                                
+                            </Box>
 
-                        </div>
+                        </Box>
                     )
                 })}
-            </div>
+            </Box>
 
-            <div
-                className="debug-stuff panel-content-group p-0"
+            <Box
+                sx={{ ...panelContentSx, p: 0, display: mobile ? "none" : "block" }}
             >
 
-                <div className="debug-tabs-wrap border-bottom border-dark d-flex justify-content-between">
+                <Box sx={{ borderBottom: "1px solid #212529", display: "flex", justifyContent: "space-between" }}>
 
-                    <div className='d-flex'>
+                    <Box sx={{ display: "flex" }}>
                         {['Players', 'Bugs', 'Powerups'].map(item =>
                             <ArticlesButton
                                 key={item}
                                 small
-                                className={``}
                                 active={item == debugTab}
                                 onClick={() => {
                                     setDebugTab(item)
@@ -262,9 +257,9 @@ const RightPanelContent = (props) => {
                                 {item}
                             </ArticlesButton>
                         )}
-                    </div>
+                    </Box>
 
-                    <div>
+                    <Box>
                         <ArticlesButton
                             small
                             active={devDebugPanel}
@@ -273,54 +268,53 @@ const RightPanelContent = (props) => {
                             }}
                         >
                             {devDebugPanel ?
-                                <i className="fad fa-eye-slash me-0"></i>
+                                <VisibilityOffIcon  sx={{ fontSize: "1em", mr: "0", verticalAlign: "middle" }} />
                                 :
-                                <i className="fad fa-eye me-0"></i>
+                                <VisibilityIcon  sx={{ fontSize: "1em", mr: "0", verticalAlign: "middle" }} />
                             }
                         </ArticlesButton>
-                    </div>
+                    </Box>
 
-                </div>
+                </Box>
 
-                <div>
+                <Box>
                     {devDebugPanel &&
-                        <div
-                            className='p-2'
-                            style={{ maxHeight: '400px', 'overflowY': 'auto' }}
+                        <Box
+                            sx={{ p: "0.5rem", maxHeight: "400px", overflowY: "auto" }}
                         >
                             {
                                 debugTab == 'Players' &&
-                                <div className='small'>
+                                <Box sx={{ fontSize: "0.875em" }}>
                                     <pre>
                                         {JSON.stringify(players, null, 2)}
                                     </pre>
-                                </div>
+                                </Box>
                             }
 
                             {
                                 debugTab == 'Bugs' &&
-                                <div className='small'>
+                                <Box sx={{ fontSize: "0.875em" }}>
                                     <pre>
                                         {JSON.stringify(bugs, null, 2)}
                                     </pre>
-                                </div>
+                                </Box>
                             }
 
                             {
                                 debugTab == 'Powerups' &&
-                                <div className='small'>
+                                <Box sx={{ fontSize: "0.875em" }}>
                                     <pre>
                                         {JSON.stringify(gameState.powerups, null, 2)}
                                     </pre>
-                                </div>
+                                </Box>
                             }
-                        </div>
+                        </Box>
                     }
-                </div>
+                </Box>
 
-            </div>
+            </Box>
 
-        </div>
+        </Box>
     )
 }
 

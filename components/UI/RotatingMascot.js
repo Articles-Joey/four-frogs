@@ -1,3 +1,5 @@
+"use client";
+import Box from "@mui/material/Box";
 import { useState, useEffect } from "react";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
@@ -46,7 +48,7 @@ export default function RotatingMascot() {
     }, []);
 
     return (
-        <div className="rotating-mascot-container w-100 h-100">
+        <Box className="rotating-mascot-container" sx={{ width: "100%", height: "100%" }}>
             <Canvas>
                 <OrbitControls
                     autoRotate
@@ -58,10 +60,10 @@ export default function RotatingMascot() {
 
                 <ambientLight intensity={2} />
 
-                {/* Dynamically render the active model based on the state index */}
+                
                 {modelsToCycle[currentIndex].component}
 
             </Canvas>
-        </div>
+        </Box>
     );
 }

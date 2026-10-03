@@ -1,5 +1,7 @@
 "use client"
 import { Suspense } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 import packageInfo from '@/package.json';
 
@@ -14,7 +16,7 @@ import GlobalClientModals from '@articles-media/articles-dev-box/GlobalClientMod
 import HotkeyHandler from '@articles-media/articles-dev-box/HotkeyHandler';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-export default function LayoutClient({ children }) {
+export default function LayoutClient() {
 
     return (
         <>
@@ -70,19 +72,21 @@ export default function LayoutClient({ children }) {
                     }}
                     infoModalConfig={{
                         previewImage: "img/game-preview.jpg",
-                        appendContent: <div className='mt-3'>
-                            <h5>Controls</h5>
-                            <p>
+                        appendContent: <Box sx={{ mt: '1rem' }}>
+                            <Typography variant="h6" component="h5">Controls</Typography>
+                            <Typography component="p" sx={{ mb: '1rem' }}>
                                 Can be customized in the settings.
-                            </p>
-                            <img
+                            </Typography>
+                            <Box
+                                component="img"
                                 src={`${process.env.NEXT_PUBLIC_CDN}games/Four Frogs/controls.png`}
-                                style={{
+                                alt="Four Frogs controls"
+                                sx={{
                                     width: '100%',
                                     objectFit: 'contain'
                                 }}
                             />
-                        </div>
+                        </Box>
                     }}
                 />
 

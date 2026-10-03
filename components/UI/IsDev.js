@@ -1,66 +1,27 @@
-import { useState, useEffect } from 'react';
+"use client";
 
-// import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import useUserDetails from "@articles-media/articles-dev-box/useUserDetails";
+import useUserToken from "@articles-media/articles-dev-box/useUserToken";
 
-// import { togglePrivacyMode } from "@/redux/actions/siteActions";
-import ArticlesButton from '@/components/UI/Button';
+export default function IsDev({ className, noOutline, children, inline }) {
+    const { data: userToken } = useUserToken(process.env.NEXT_PUBLIC_GAME_PORT);
+    const { data: userDetails } = useUserDetails({ token: userToken });
+    const [isMounted, setIsMounted] = useState(false);
 
-import useUserDetails from '@articles-media/articles-dev-box/useUserDetails';
-import useUserToken from '@articles-media/articles-dev-box/useUserToken';
-
-export default function IsDev({className, noOutline, children, inline}) {
-
-    const {
-        data: userToken,
-        error: userTokenError,
-        isLoading: userTokenLoading,
-        mutate: userTokenMutate
-    } = useUserToken(
-        process.env.NEXT_PUBLIC_GAME_PORT
-    );
-
-    const {
-        data: userDetails,
-        error: userDetailsError,
-        isLoading: userDetailsLoading,
-        mutate: userDetailsMutate
-    } = useUserDetails({
-        token: userToken
-    });
-
-    const [ isMounted, setIsMounted ] = useState()
     useEffect(() => {
-        setIsMounted(true)
-    }, [])
+        setIsMounted(true);
+    }, []);
 
-    // If you just want to wrap the sensitive info instead of conditional rendering on page with privacy_mode selector
-    // I think this is better but you can do either way
-    if (children && userDetails?.roles?.isDev && isMounted) {
-        return (
-            <div className={`is-dev-content ${noOutline && 'no-outline'} ${className} ${inline && 'd-inline-block'}`}>{children}</div>
-        )
-    }
-
-    return
+    if (!children || !userDetails?.roles?.isDev || !isMounted) return null;
 
     return (
-        <div className="d-flex align-items-center">
-
-            <div className="small badge bg-dark">
-                Privacy mode enabled
-            </div>
-
-            <ArticlesButton
-                className="ms-auto"
-                small
-                onClick={() => {
-                    // dispatch( togglePrivacyMode() )
-                }}
-            >
-                Disable
-            </ArticlesButton>
-
-        </div>
-    )
-
+        <Box
+            className={['is-dev-content', noOutline ? 'no-outline' : '', className || ''].filter(Boolean).join(' ')}
+            sx={{ display: inline ? "inline-block" : "block" }}
+        >
+            {children}
+        </Box>
+    );
 }

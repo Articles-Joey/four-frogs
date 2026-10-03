@@ -1,91 +1,105 @@
-"use client"
-import { useEffect, useContext, useState, Suspense } from 'react';
+"use client";
 
-import Link from 'next/link'
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import Box from "@mui/material/Box";
+import { useSocketStore } from "@/hooks/useSocketStore";
+import { useStore } from "@/hooks/useStore";
+import PageTemplateLandingPage from "@articles-media/articles-dev-box/PageTemplateLandingPage";
+import ArticlesButton from "@/components/UI/Button";
+import PrivateGameModal from "@/components/UI/PrivateGameModal";
+import IsDev from "@/components/UI/IsDev";
 
-// import logo from '../icon.png'
-
-import { useSocketStore } from '@/hooks/useSocketStore';
-import { useStore } from '@/hooks/useStore';
-
-import PageTemplateLandingPage from '@articles-media/articles-dev-box/PageTemplateLandingPage';
-import RotatingMascot from '@/components/UI/RotatingMascot';
-import ArticlesButton from '@/components/UI/Button';
-import PrivateGameModal from '@/components/UI/PrivateGameModal';
-import IsDev from '@/components/UI/IsDev';
-import LandingBackgroundAnimation from '@/components/Game/LandingBackgroundAnimation';
+const LandingBackgroundAnimation = dynamic(
+    () => import("@/components/Game/LandingBackgroundAnimation"),
+    { ssr: false },
+);
+const RotatingMascot = dynamic(
+    () => import("@/components/UI/RotatingMascot"),
+    { ssr: false },
+);
 
 export default function FourFrogsLobbyPage() {
-
-    const darkMode = useStore((state) => state.darkMode)
-    const showPrivateGameModal = useStore((state) => state.showPrivateGameModal)
-    const setShowPrivateGameModal = useStore((state) => state.setShowPrivateGameModal)
+    const darkMode = useStore((state) => state.darkMode);
+    const showPrivateGameModal = useStore((state) => state.showPrivateGameModal);
+    const setShowPrivateGameModal = useStore((state) => state.setShowPrivateGameModal);
 
     return (
-        <>
-            {showPrivateGameModal &&
-                <PrivateGameModal
-                    show={showPrivateGameModal}
-                    setShow={setShowPrivateGameModal}
-                />
-            }
+        <Box
+            sx={{
+                position: "relative",
+                isolation: "isolate",
+                "& .landing-page": {
+                    flexGrow: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: "100vh",
+                },
+                "& .servers": { display: "grid", gap: "5px", gridTemplateColumns: "repeat(2, minmax(0, 1fr))" },
+                "& .server": {
+                    p: "0.5rem",
+                    border: "1px solid rgba(0,0,0,0.25)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                },
+                "& .ad-wrap": {
+                    mt: "1rem",
+                    "@media (min-width: 992px)": {
+                        mt: 0,
+                        display: "block",
+                        position: "absolute",
+                        right: "1rem",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                    },
+                },
+                "& .background-wrap": {
+                    position: "fixed",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    zIndex: -1,
+                    "& img": { filter: "blur(2px)" },
+                },
+            }}
+        >
+            {showPrivateGameModal && (
+                <PrivateGameModal show={showPrivateGameModal} setShow={setShowPrivateGameModal} />
+            )}
             <PageTemplateLandingPage
                 useSocketStore={useSocketStore}
                 useStore={useStore}
                 RotatingMascot={RotatingMascot}
                 Link={Link}
-                logoImage={"img/thumbnail.webp"}
-                LandingBackgroundAnimation={
-                    <LandingBackgroundAnimation />
-                }
+                useRouter={useRouter}
+                logoImage="img/thumbnail.webp"
+                LandingBackgroundAnimation={<LandingBackgroundAnimation />}
                 heroOverride={
-                    darkMode ?
-                        <img
-                            src="img/hero-dark.webp"
-                            alt="Hero Image"
-                            className="w-100"
-                        />
-                        :
-                        <img
-                            src="img/hero.webp"
-                            alt="Hero Image"
-                            className="w-100"
-                        />
+                    <Box
+                        component="img"
+                        src={darkMode ? "img/hero-dark.webp" : "img/hero.webp"}
+                        alt="Four Frogs"
+                        sx={{ width: "100%" }}
+                    />
                 }
-                // disableHero={true}
-                // CardBodyOverride={<></>}
-                // LandingBackgroundAnimation={<></>}
-                backgroundImage={
-                    darkMode ?
-                        "img/dark-background.webp"
-                        :
-                        "img/background.webp"
-                }
+                backgroundImage={darkMode ? "img/dark-background.webp" : "img/background.webp"}
                 CardBodyAppendContent={
-                    <>
-                        <IsDev>
-                            <ArticlesButton
-                                className="mt-3 w-100"
-                                onClick={() => {
-                                    setShowPrivateGameModal(true)
-                                }}
-                            >
-                                Custom Games
-                            </ArticlesButton>
-                        </IsDev>
-                    </>
+                    <IsDev>
+                        <ArticlesButton sx={{ mt: "1rem", width: "100%" }} onClick={() => setShowPrivateGameModal(true)}>
+                            Custom Games
+                        </ArticlesButton>
+                    </IsDev>
                 }
-                // singlePlayerConfig={{}}
                 multiplayerConfig={{
                     type: "WebSocket",
-                    // comingSoon: true,
                     defaultServers: 2,
                     privateServerSupport: false,
                     onlinePlayersTemplate: "2.0",
-
                 }}
-            // brandingTextClass="jaro-primary"
             />
-        </>
+        </Box>
     );
 }
